@@ -1,0 +1,40 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: abe-service
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+abe:
+  rag:
+    enabled: true
+    embedding:
+      base-url: ${ABE_EMBEDDING_BASE_URL:https://dashscope.aliyuncs.com/compatible-mode}
+      api-key: ${ABE_RAG_EMBEDDING_API_KEY:}
+      model: ${ABE_EMBEDDING_MODEL:text-embedding-v4}
+      dimensions: 1024
+      batch-size: 10        # 供应商限制：每批最多 10 条
+    qdrant:
+      host: ${QDRANT_HOST:localhost}
+      port: ${QDRANT_GRPC_PORT:6334}
+      collection: ${QDRANT_COLLECTION:abe_knowledge}
+    retrieve:
+      top-k: 5
+      score-threshold: 0.15
+    ingest:
+      # 注意：相对"运行工作目录"。mvn spring-boot:run 的工作目录是 module-d-integration
+      corpus-dir: ${ABE_CORPUS_DIR:../module-a-rag/docs}
+      chunk-max-chars: 800
+      chunk-overlap-chars: 120
+    dev-endpoints:
+      enabled: true
+
+logging:
+  level:
+    com.abe: DEBUG
