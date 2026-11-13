@@ -1,5 +1,6 @@
 server:
   port: 8080
+  address: ${ABE_SERVER_BIND_ADDRESS:127.0.0.1}  # 团队成员默认各自在本机运行
 
 spring:
   application:
@@ -27,13 +28,17 @@ abe:
     retrieve:
       top-k: 5
       score-threshold: 0.15
+      relationship-query-expansion: true  # 同时包含属性、密文、密钥和策略时补充双向术语
     ingest:
       # 注意：相对"运行工作目录"。mvn spring-boot:run 的工作目录是 module-d-integration
       corpus-dir: ${ABE_CORPUS_DIR:../module-a-rag/docs}
       chunk-max-chars: 800
       chunk-overlap-chars: 120
+      include-qa: ${ABE_RAG_INCLUDE_QA:false}  # .qa.md 默认不入库
     dev-endpoints:
       enabled: true
+      ingest-enabled: ${ABE_RAG_INGEST_ENABLED:false}
+      allow-recreate: ${ABE_RAG_ALLOW_RECREATE:false}
 
 logging:
   level:

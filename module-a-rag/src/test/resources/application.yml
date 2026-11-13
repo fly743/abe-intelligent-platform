@@ -1,10 +1,10 @@
 abe:
   rag:
     embedding:
-      api-key: test-key          # 冒烟测试用假 embedding，这里只是让 OpenAiApi 能构造出来
-      model: fake-embedding
+      api-key: ${ABE_RAG_EMBEDDING_API_KEY:}
+      model: text-embedding-v4
       dimensions: 1024
     qdrant:
       host: localhost
       port: 6334
-      collection: abe_knowledge_smoke   # 独立集合，不污染正式知识库
+      collection: abe_knowledge_smoke

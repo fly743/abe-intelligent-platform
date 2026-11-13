@@ -1,50 +1,37 @@
 # ABE-project
 
-本仓库用于协作开发 ABE Intelligent Platform，按功能划分为知识问答、代码生成与验证、Web 展示、系统集成四个模块。
+本仓库用于协作开发 ABE Intelligent Platform，按项目实施任务分为知识问答、代码生成与验证、Web 展示、系统集成与测试四部分。任务推进顺序以 `docs/项目背景与任务记忆.md` 记录的项目实施方案图片为准；技术选型可按团队后续决定调整。
 
-## 目录结构
+知识检索模块的现状、内部接口、配置与后续工作见 [技术文档](docs/ABE知识检索模块技术文档.md)。 团队成员首次配置与导入请参阅 [团队本机部署指南](docs/团队本机部署与语料导入.md)。
 
-```text
-.
-├── module-a-rag/                 # A：ABE 知识问答插件
-│   ├── docs/
-│   │   ├── papers/              # ABE 论文和参考资料
-│   │   ├── notes/               # 知识笔记
-│   │   └── faq/                 # 常见问题
-│   ├── evaluation/              # RAG 评测数据与评测记录
-│   └── README.md
-├── module-b-codegen/             # B：ABE 代码生成与验证
-│   ├── crypto-poc/              # CP-ABE 算法验证
-│   ├── templates/               # Java 代码模板
-│   ├── sandbox/                 # 代码运行沙箱相关内容
-│   ├── tests/                   # 测试用例
-│   └── README.md
-├── module-c-web/                 # C：Web 前端展示
-│   └── README.md
-├── module-d-integration/         # D：系统集成与测试
-│   └── README.md
-├── docs/                         # 项目整体设计和接口文档
-├── deploy/                       # 公共部署配置
-├── .gitignore                    # 忽略本地配置、密钥和数据文件
-└── README.md                     # 项目总说明
-```
+## 模块
 
-## 当前进度
+- `module-a-rag/`：ABE 知识问答/RAG，当前已有语料切分、向量入库与检索代码。
+- `module-b-codegen/`：ABE 代码生成与验证，当前为 Maven 模块骨架，功能待开发。
+- `module-c-web/`：Web 展示，当前为 Maven 模块骨架，功能待开发。
+- `module-d-integration/`：系统入口与集成，目前包含 Spring Boot 应用、配置及对 RAG 模块的依赖。
+- `deploy/`：当前包含 Qdrant Docker Compose 配置。
+- `docs/项目背景与任务记忆.md`：项目背景、图片规定的实施顺序、报告分工参考和基于仓库证据的进度记录。
 
-目前仓库已经建立 A、B、C、D 四个模块的基础目录，以及项目级的 `docs/` 和 `deploy/` 目录。部分暂时为空的目录使用 `.gitkeep` 占位，以便 Git 保留目录结构。
+## 当前进度（2026-11-13）
 
-以下内容尚未创建，后续可根据技术方案逐步补充：
+A 模块已经实现 RAG 数据准备和召回链路的主要基础：Markdown front matter/章节切分、元数据保留、Qdrant 批量入库及幂等 ID、相似度检索、来源片段与上下文组装，以及内部 health/ingest/search/context 调试接口。现有正式语料包括 BSW 2007、Waters 2011、Li 等 2013、GPSW 2006、Chase 2007 五篇论文的知识笔记、分类 QA 和综合对比，分别存储在 `abe_knowledge` 和 `abe_knowledge_qa`；旧联调 FAQ 与工程草稿已清理。真实服务测试须显式开启且可能收费。
 
-- `module-a-rag`：论文和知识笔记、FAQ 内容、RAG 评测数据，以及具体插件或服务工程。
-- `module-b-codegen`：CP-ABE 验证代码、Java 模板、沙箱配置和测试用例。
-- `module-c-web`：前端工程及页面实现。
-- `module-d-integration`：集成测试、插件装配和测试脚本。
-- `docs/`：整体设计、接口契约等正式文档。
-- `deploy/`：Docker Compose、数据库等部署配置。
+目前没有发现基于检索片段生成最终问答的服务或 Harness/Cordis 插件适配实现，因此 A 项仍需补充领域资料、问答生成/引用策略和插件接入。B、C 尚无业务源码；D 有应用启动类及运行配置，但还没有完整系统集成和测试流程。仓库没有证据表明整体 MVP 已打通。
 
-以上目录当前是项目骨架，不代表对应模块的功能代码已经实现。后续可以在各模块内逐步补充具体工程结构和实现。
+2026-11-13 指定本机 Maven 缓存离线运行 `mvn -o "-Dmaven.repo.local=C:\Users\fly\.m2\repository" test` 成功：A 模块 4 项测试通过，B、C、D 暂无测试。Maven 离线选项只限制依赖解析；后续确认测试上下文可能注入假 embedding，不能将该次结果作为真实 embedding 服务已验证的证据。
 
-## 协作建议
+## 建议推进
 
-团队成员可以按负责模块创建独立开发分支，在对应目录中开发，完成后通过 Pull Request 合并到 `main`。请勿将 API Key、数据库密码、`.env` 文件或本地数据库数据提交到仓库。
-```
+按图片顺序先完成 A：补齐带可靠出处的 ABE 原理、算法和应用语料；围绕概念解释、方案对比和常见问题准备问题集；在现有召回基础上实现回答与引用返回，明确证据不足时的处理方式；再接入插件并评估效果。随后推进 B 代码生成/验证、C Web 展示，最后进行 D 集成测试。各成员按选题报告原分工协作，顺序不因此改变。
+
+## 协作约定
+
+不要提交 API Key、数据库密码、`.env` 文件或本地数据库数据。技术选型和实现方案按团队最新决定更新。
+
+
+
+
+
+
+

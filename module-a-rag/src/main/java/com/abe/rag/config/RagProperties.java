@@ -10,6 +10,7 @@ public class RagProperties {
     private final Qdrant qdrant = new Qdrant();
     private final Retrieve retrieve = new Retrieve();
     private final Ingest ingest = new Ingest();
+    private final DevEndpoints devEndpoints = new DevEndpoints();
 
     public boolean isEnabled() { return enabled; }
     public void setEnabled(boolean enabled) { this.enabled = enabled; }
@@ -17,6 +18,17 @@ public class RagProperties {
     public Qdrant getQdrant() { return qdrant; }
     public Retrieve getRetrieve() { return retrieve; }
     public Ingest getIngest() { return ingest; }
+    public DevEndpoints getDevEndpoints() { return devEndpoints; }
+
+    public static class DevEndpoints {
+        private boolean ingestEnabled = false;
+        private boolean allowRecreate = false;
+
+        public boolean isIngestEnabled() { return ingestEnabled; }
+        public void setIngestEnabled(boolean v) { this.ingestEnabled = v; }
+        public boolean isAllowRecreate() { return allowRecreate; }
+        public void setAllowRecreate(boolean v) { this.allowRecreate = v; }
+    }
 
     public static class Embedding {
         private String baseUrl = "https://dashscope.aliyuncs.com/compatible-mode";
@@ -62,6 +74,8 @@ public class RagProperties {
 
     public static class Retrieve {
         private int topK = 8;
+        /** 对询问密文和密钥属性关系的问题补充双向术语，便于召回比较资料。 */
+        private boolean relationshipQueryExpansion = true;
         /** 当前供应商相关样本约 0.2，先取 0.15；有正式语料后按正负样本分布精调。 */
         private double scoreThreshold = 0.15D;
 
@@ -69,6 +83,8 @@ public class RagProperties {
         public void setTopK(int v) { this.topK = v; }
         public double getScoreThreshold() { return scoreThreshold; }
         public void setScoreThreshold(double v) { this.scoreThreshold = v; }
+        public boolean isRelationshipQueryExpansion() { return relationshipQueryExpansion; }
+        public void setRelationshipQueryExpansion(boolean v) { this.relationshipQueryExpansion = v; }
     }
 
     public static class Ingest {
@@ -76,6 +92,8 @@ public class RagProperties {
         private String corpusDir = "docs";
         private int chunkMaxChars = 800;
         private int chunkOverlapChars = 120;
+        /** QA 与知识笔记高度重合，默认只摄取知识笔记；按需单独评估 QA。 */
+        private boolean includeQa = false;
 
         public String getCorpusDir() { return corpusDir; }
         public void setCorpusDir(String v) { this.corpusDir = v; }
@@ -83,5 +101,7 @@ public class RagProperties {
         public void setChunkMaxChars(int v) { this.chunkMaxChars = v; }
         public int getChunkOverlapChars() { return chunkOverlapChars; }
         public void setChunkOverlapChars(int v) { this.chunkOverlapChars = v; }
+        public boolean isIncludeQa() { return includeQa; }
+        public void setIncludeQa(boolean v) { this.includeQa = v; }
     }
 }

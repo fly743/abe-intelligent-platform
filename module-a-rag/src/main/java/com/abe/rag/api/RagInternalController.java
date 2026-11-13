@@ -9,7 +9,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 /** RAG 内部调试接口：仅 Java 服务内网使用，由 Harness 插件转调，前端不直连。 */
 @RestController
@@ -48,6 +50,12 @@ public class RagInternalController {
 
     @PostMapping("/ingest")
     public IngestReport ingest(@RequestParam(defaultValue = "false") boolean recreate) {
+        if (!properties.getDevEndpoints().isIngestEnabled()) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "语料入库接口未启用");
+        }
+        if (recreate && !properties.getDevEndpoints().isAllowRecreate()) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "集合重建未启用");
+        }
         return ingestService.ingest(recreate);
     }
 

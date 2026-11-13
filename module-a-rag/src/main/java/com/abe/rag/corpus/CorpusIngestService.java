@@ -68,7 +68,7 @@ public class CorpusIngestService {
         int fileCount = 0;
         int chunkCount = 0;
 
-        for (Path file : listFiles(root)) {
+        for (Path file : listFiles(root, properties.getIngest().isIncludeQa())) {
             String relative = root.relativize(file).toString().replace('\\', '/');
             String docId = relative.substring(0, relative.lastIndexOf('.'));
             try {
@@ -156,7 +156,7 @@ public class CorpusIngestService {
         }
     }
 
-    private static List<Path> listFiles(Path root) {
+    static List<Path> listFiles(Path root, boolean includeQa) {
         try (Stream<Path> stream = Files.walk(root)) {
             return stream.filter(Files::isRegularFile)
                     .filter(p -> {
@@ -164,6 +164,8 @@ public class CorpusIngestService {
                         return n.endsWith(".md") || n.endsWith(".txt");
                     })
                     .filter(p -> !p.getFileName().toString().startsWith("."))
+                    // QA 文件独立维护，默认跳过，避免与相同知识笔记混合召回。
+                    .filter(p -> includeQa || !p.getFileName().toString().toLowerCase(java.util.Locale.ROOT).endsWith(".qa.md"))
                     .sorted()
                     .toList();
         } catch (IOException e) {

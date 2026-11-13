@@ -8,6 +8,9 @@ import java.util.Map;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
+import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
+import org.springframework.ai.openai.OpenAiEmbeddingModel;
+import com.abe.rag.config.RagVectorStoreConfiguration;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.embedding.EmbeddingModel;
 import org.springframework.ai.vectorstore.SearchRequest;
@@ -16,31 +19,32 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Import;
 
 /**
  * 真实 embedding（阿里云百炼 text-embedding-v4）联调测试。
  *
- * <p>门控：只有设置了环境变量 ABE_RAG_EMBEDDING_API_KEY 才运行，
+ * <p>门控：只有显式设置 -Dabe.integration.real=true 且设置 API Key 才运行，
  * 队友没 key 时该测试自动跳过，不会拖红构建。
  * Spring Boot 的宽松绑定会把 env 变量 ABE_RAG_EMBEDDING_API_KEY
  * 映射到 abe.rag.embedding.api-key，所以代码里不用写 key。
  *
- * <p>集合用独立的 abe_knowledge_embed_test，避免污染正式库。
+ * <p>集合用独立的 abe_knowledge_real_embed_test，避免污染正式库。
  */
+@EnabledIfSystemProperty(named = "abe.integration.real", matches = "true")
 @EnabledIfEnvironmentVariable(named = "ABE_RAG_EMBEDDING_API_KEY", matches = ".+")
 @SpringBootTest(
         classes = RealEmbeddingSmokeTest.TestApp.class,
         properties = {
                 "abe.rag.embedding.model=text-embedding-v4",
                 "abe.rag.embedding.dimensions=1024",
-                "abe.rag.qdrant.collection=abe_knowledge_embed_test"
+                "abe.rag.qdrant.collection=abe_knowledge_real_embed_test"
         })
 class RealEmbeddingSmokeTest {
 
     @SpringBootConfiguration
     @EnableAutoConfiguration
-    @ComponentScan(basePackages = "com.abe.rag")
+    @Import(RagVectorStoreConfiguration.class)
     static class TestApp {
     }
 
@@ -52,6 +56,7 @@ class RealEmbeddingSmokeTest {
 
     @Test
     void 真实向量维度为1024() {
+        org.junit.jupiter.api.Assertions.assertInstanceOf(OpenAiEmbeddingModel.class, embeddingModel);
         float[] vec = embeddingModel.embed("CP-ABE 的访问策略写在密文中");
         assertEquals(1024, vec.length, "百炼 text-embedding-v4 dimensions 应为 1024");
         System.out.println("维度=" + vec.length);
@@ -59,6 +64,7 @@ class RealEmbeddingSmokeTest {
 
     @Test
     void 语义检索_不靠字面重合也能命中() {
+        org.junit.jupiter.api.Assertions.assertInstanceOf(OpenAiEmbeddingModel.class, embeddingModel);
         // 三条语料，查询与正确目标几乎不共字，只能靠语义相似度
         Document cpabe = Document.builder()
                 .id(UUID.randomUUID().toString())
@@ -94,3 +100,4 @@ class RealEmbeddingSmokeTest {
                 "语义最接近的应是强调‘属性满足策略才能解密’的那条");
     }
 }
+
