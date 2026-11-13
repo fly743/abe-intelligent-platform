@@ -1,0 +1,98 @@
+[
+  {
+    "id": "H01",
+    "question": "密文绑定访问策略，私钥绑定属性，这属于什么方案？",
+    "gold": [
+      {
+        "doc": "papers/bsw2007-cp-abe",
+        "section": "2. CP-ABE"
+      },
+      {
+        "doc": "notes/abe-scheme-comparison",
+        "section": "CP-ABE："
+      },
+      {
+        "doc": "papers/gpsw2006-kp-abe",
+        "section": "2. 与 CP-ABE"
+      },
+      {
+        "doc": "papers/bsw2007-cp-abe",
+        "section": "3. CP-ABE 与 KP-ABE"
+      },
+      {
+        "doc": "papers/waters2011-cp-abe",
+        "section": "3. CP-ABE 基本接口"
+      }
+    ]
+  },
+  {
+    "id": "H02",
+    "question": "访问策略位于用户私钥，密文只包含属性集合，是哪一种 ABE？",
+    "gold": [
+      {
+        "doc": "papers/gpsw2006-kp-abe",
+        "section": "1. KP-ABE"
+      },
+      {
+        "doc": "papers/gpsw2006-kp-abe",
+        "section": "2. 与 CP-ABE"
+      },
+      {
+        "doc": "notes/abe-scheme-comparison",
+        "section": "KP-ABE："
+      },
+      {
+        "doc": "papers/bsw2007-cp-abe",
+        "section": "3. CP-ABE 与 KP-ABE"
+      }
+    ]
+  },
+  {
+    "id": "H03",
+    "question": "CP-ABE 的密文和用户私钥分别关联哪些属性或策略？",
+    "gold": [
+      {
+        "doc": "papers/bsw2007-cp-abe",
+        "section": "2. CP-ABE"
+      },
+      {
+        "doc": "notes/abe-scheme-comparison",
+        "section": "CP-ABE："
+      },
+      {
+        "doc": "papers/gpsw2006-kp-abe",
+        "section": "2. 与 CP-ABE"
+      },
+      {
+        "doc": "papers/bsw2007-cp-abe",
+        "section": "3. CP-ABE 与 KP-ABE"
+      },
+      {
+        "doc": "papers/waters2011-cp-abe",
+        "section": "3. CP-ABE 基本接口"
+      }
+    ]
+  },
+  {
+    "id": "H04",
+    "question": "KP-ABE 的密文和私钥分别关联什么策略或者属性？",
+    "gold": [
+      {
+        "doc": "papers/gpsw2006-kp-abe",
+        "section": "1. KP-ABE"
+      },
+      {
+        "doc": "papers/gpsw2006-kp-abe",
+        "section": "2. 与 CP-ABE"
+      },
+      {
+        "doc": "notes/abe-scheme-comparison",
+        "section": "KP-ABE："
+      },
+      {
+        "doc": "papers/bsw2007-cp-abe",
+        "section": "3. CP-ABE 与 KP-ABE"
+      }
+    ]
+  }
+]

@@ -1,0 +1,134 @@
+[
+  {
+    "id": "E02",
+    "question": "某系统给密文贴属性、在私钥中写规则，这更接近论文讨论的哪种模式？",
+    "gold": [
+      {
+        "doc": "papers/gpsw2006-kp-abe",
+        "section": "1. KP-ABE"
+      },
+      {
+        "doc": "papers/bsw2007-cp-abe",
+        "section": "3. CP-ABE"
+      },
+      {
+        "doc": "notes/abe-scheme-comparison",
+        "section": "KP-ABE："
+      },
+      {
+        "doc": "papers/gpsw2006-kp-abe",
+        "section": "2. 与 CP-ABE"
+      }
+    ]
+  },
+  {
+    "id": "E04",
+    "question": "策略为（医生 AND 心内科）OR 急诊主管，只有急诊主管属性的单个用户是否满足？",
+    "gold": [
+      {
+        "doc": "papers/bsw2007-cp-abe",
+        "section": "6. 自拟策略树"
+      }
+    ]
+  },
+  {
+    "id": "E08",
+    "question": "能否用 BSW 论文证明采用任意曲线和哈希的生产系统一定安全？",
+    "gold": [
+      {
+        "doc": "papers/bsw2007-cp-abe",
+        "section": "17. 安全结论的边界"
+      }
+    ]
+  },
+  {
+    "id": "E09",
+    "question": "BSW 2007 密文中的访问树是否对查看密文的人保密？",
+    "gold": [
+      {
+        "doc": "papers/bsw2007-cp-abe",
+        "section": "11. 加密：密文组成"
+      }
+    ]
+  },
+  {
+    "id": "W02",
+    "question": "Waters 2011 攻击者何时必须确定挑战策略，这能证明完全自适应安全吗？",
+    "gold": [
+      {
+        "doc": "papers/waters2011-cp-abe",
+        "section": "4. 选择性安全"
+      }
+    ]
+  },
+  {
+    "id": "W03",
+    "question": "LSSS 中哪个向量包含秘密，怎样得到每一行的份额？",
+    "gold": [
+      {
+        "doc": "papers/waters2011-cp-abe",
+        "section": "6. LSSS"
+      }
+    ]
+  },
+  {
+    "id": "W05",
+    "question": "Waters 主方案定理对挑战矩阵尺寸和所依赖假设有什么限制？",
+    "gold": [
+      {
+        "doc": "papers/waters2011-cp-abe",
+        "section": "14. 主构造证明"
+      }
+    ]
+  },
+  {
+    "id": "L02",
+    "question": "Li 2013 的 PSD 中策略是在文件还是用户密钥中？",
+    "gold": [
+      {
+        "doc": "papers/li2013-phr-abe",
+        "section": "5. PSD"
+      }
+    ]
+  },
+  {
+    "id": "L05",
+    "question": "Li 2013 为什么不直接对整个大文件用 ABE？",
+    "gold": [
+      {
+        "doc": "papers/li2013-phr-abe",
+        "section": "9. 文件加密"
+      }
+    ]
+  },
+  {
+    "id": "L07",
+    "question": "Li 2013 的急诊人员能否不经过验证就读取全部患者文件？",
+    "gold": [
+      {
+        "doc": "papers/li2013-phr-abe",
+        "section": "14. 紧急访问"
+      }
+    ]
+  },
+  {
+    "id": "G05",
+    "question": "GPSW 2006 中，持有 KP 密钥的用户可否凭委托无限扩大权限？",
+    "gold": [
+      {
+        "doc": "papers/gpsw2006-kp-abe",
+        "section": "12. 密钥委托"
+      }
+    ]
+  },
+  {
+    "id": "C01",
+    "question": "多个属性机构是否意味着 Chase 2007 不需要可信中心？",
+    "gold": [
+      {
+        "doc": "papers/chase2007-ma-abe",
+        "section": "5. 可信中央机构"
+      }
+    ]
+  }
+]
