@@ -4,6 +4,12 @@ abe:
       api-key: ${ABE_RAG_EMBEDDING_API_KEY:}
       model: text-embedding-v4
       dimensions: 1024
+    chat:
+      base-url: ${ABE_CHAT_BASE_URL:https://api.deepseek.com}
+      api-key: ${ABE_RAG_CHAT_API_KEY:}
+      model: ${ABE_CHAT_MODEL:deepseek-chat}
+      temperature: 0.2
+      max-tokens: 1024
     qdrant:
       host: localhost
       port: 6334
