@@ -1,0 +1,12 @@
+[
+  { "n": 1,  "k": "概念", "q": "多授权机构要解决 ABE 的什么问题",                  "expect": "papers/chase2007-ma-abe" },
+  { "n": 2,  "k": "概念", "q": "LSSS 线性秘密共享是怎么做线性重构的",              "expect": "papers/waters2011-cp-abe" },
+  { "n": 3,  "k": "概念", "q": "MA-ABE 和 CP-ABE、KP-ABE 之间是什么关系",          "expect": "papers/chase2007-ma-abe" },
+  { "n": 4,  "k": "对比", "q": "CP-ABE 和 KP-ABE 有什么区别",                     "expect": "papers/bsw2007-cp-abe" },
+  { "n": 5,  "k": "对比", "q": "方案比较时参考了哪些维度和来源",                   "expect": "notes/abe-scheme-comparison" },
+  { "n": 6,  "k": "对比", "q": "抗合谋时哪些用户的密钥不能合并",                   "expect": "papers/bsw2007-cp-abe" },
+  { "n": 7,  "k": "FAQ",  "q": "CP-ABE 的密文由哪些部分组成",                      "expect": "papers/bsw2007-cp-abe" },
+  { "n": 8,  "k": "FAQ",  "q": "公共域上的策略表达有什么限制",                     "expect": "papers/li2013-phr-abe" },
+  { "n": 9,  "k": "FAQ",  "q": "按需属性如何支持用户撤销",                         "expect": "papers/li2013-phr-abe" },
+  { "n": 10, "k": "拒答", "q": "ABE 如何做后量子安全改造，格基方案有哪些",         "expect": "REFUSE" }
+]
