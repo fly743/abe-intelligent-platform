@@ -1,6 +1,0 @@
-# 本地开发用 overlay 配置（不改动用户 profile）
-# 用法：在 harness 仓库根目录执行
-#   pnpm dsh web --patch D:/projects/abe-harness-plugin/cordis.yml
-- insert:
-    - id: abe-rag
-      name: 'D:/projects/abe-harness-plugin/src/index.ts'

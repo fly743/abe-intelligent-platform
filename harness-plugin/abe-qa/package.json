@@ -1,6 +1,6 @@
 {
-  "name": "abe-qa",
-  "version": "0.1.1",
+  "name": "harness-plugin-abe-qa",
+  "version": "0.1.2",
   "description": "ABE 属性基加密知识库问答：答案附带可核查的引用来源，证据不足时明确拒答",
   "displayName": "ABE知识问答",
   "title": "ABE知识问答",

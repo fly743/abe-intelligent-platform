@@ -1,0 +1,6 @@
+# Local dev overlay for this plugin (does not touch the user profile).
+# Run from the harness repo root:
+#   pnpm dsh web --patch D:/ABE-Program/harness-plugin/abe-qa/cordis.yml
+- insert:
+    - id: abe-rag
+      name: 'D:/ABE-Program/harness-plugin/abe-qa/lib/index.js'

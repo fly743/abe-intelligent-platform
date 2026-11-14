@@ -1,0 +1,5 @@
+# harness-plugin-abe-qa bundle patch: merged into the user profile by the plugin manager on install.
+# name must be the package name (resolved from the profile node_modules), not a file path.
+- insert:
+    - id: abe-rag
+      name: 'harness-plugin-abe-qa'

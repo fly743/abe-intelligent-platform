@@ -1,78 +1,60 @@
-# dsh-plugin-abe-rag
+# harness-plugin
 
-ABE（属性基加密）知识库问答插件，为 DeepSeek Harness 提供两个工具：
+DeepSeek Harness 业务插件集合。每个子目录是一个**可独立安装的 npm 包**。
 
-| 工具 | 作用 |
+## 目录结构
+
+```
+harness-plugin/
+└─ abe-qa/                  ABE 知识库问答插件（harness-plugin-abe-qa）
+   ├─ package.json          name / version / dsh.bundle.patch
+   ├─ cordis.patch.yml      bundle 条目（提交用，name 填包名）
+   ├─ cordis.yml            本地开发 overlay（name 填 lib/index.js 绝对路径）
+   ├─ src/index.ts          插件源码（abe_qa / abe_rag_health）
+   ├─ lib/index.js          esbuild 产物（自包含，需一并提交）
+   └─ README.md             安装与排错说明
+```
+
+## 新增一个插件的步骤
+
+1. 在 `harness-plugin/` 下建目录 `<插件名>/`
+2. 复制 `abe-qa/package.json` 改三处：`name`（如 `harness-plugin-xxx`）、`version`、`description`
+3. `cordis.patch.yml` 里把 `id` 与 `name` 换成新插件的
+4. `src/index.ts` 用 `defineTool` 注册工具，`export const name / inject / apply`
+5. 打包（必须带 tsconfig，否则 TS 装饰器残留会导致 `failed to import`）：
+
+```powershell
+$repo = "D:\projects\deepseek-harness"
+$plug = "D:\ABE-Program\harness-plugin\<插件名>"
+$esbuild = "$repo\node_modules\.pnpm\@esbuild+win32-x64@0.28.1\node_modules\@esbuild\win32-x64\esbuild.exe"
+New-Item -ItemType Directory -Force -Path "$repo\.abe-build\src", "$plug\lib" | Out-Null
+Copy-Item "$plug\src\index.ts" "$repo\.abe-build\src\index.ts" -Force
+Set-Location "$repo\.abe-build"
+& $esbuild "src/index.ts" --bundle --format=esm --platform=node --target=es2022 "--tsconfig=$repo\tsconfig.json" "--outfile=$plug\lib\index.js"
+Set-Location $plug
+Remove-Item "$repo\.abe-build" -Recurse -Force
+```
+
+6. 安装：Harness → 设置 → 插件 → 添加插件 → 填该子目录绝对路径
+7. **必须**在用户 profile 里补一条（第三方 bundle 会被合成器跳过，详见下节）：
+
+```
+%USERPROFILE%\.dsh\profiles\web\cordis.patch.yml
+- insert:
+    - id: abe-rag
+      name: 'harness-plugin-abe-qa'
+```
+
+8. 重启 Harness，用工具名验证（不要用 `cordis.yml` 里有无条目做判断）
+
+## 两个必须知道的约束
+
+1. **第三方 bundle 会被 bundle 合成器跳过**（只接受官方白名单），所以插件虽能"安装"进 `package.json` 的 `bundles`，条目不会写进 `cordis.yml`。必须用用户 patch 层挂载，`name` 填**包名**。
+2. **YAML/JSON 配置文件一律纯 ASCII 注释**。中文注释在 PowerShell 写入时曾两次导致换行丢失、整份文件被当注释解析。
+
+## 环境依赖
+
+| 组件 | 位置 |
 | --- | --- |
-| `abe_qa` | 基于 ABE 知识库回答问题，答案带 `[n]` 引用编号与可核查来源；证据不足时明确拒答 |
-| `abe_rag_health` | 检查知识库服务状态：集合、embedding 模型、维度、已入库片段数 |
-
-插件本身不含检索与生成逻辑，只做参数校验、HTTP 转发与结果呈现；业务在 Java 服务侧（Spring Boot + Qdrant + DeepSeek）。
-
-## 前置条件
-
-Java 服务需先启动，默认地址 `http://127.0.0.1:8080`：
-
-```powershell
-curl.exe -sS http://localhost:8080/internal/rag/health
-```
-
-若服务地址不同，设置环境变量 `ABE_RAG_BASE_URL`。
-
-## 安装
-
-### 方式 A：本地目录（开发调试）
-
-Harness 界面 → 设置 → 插件 → 右上角 **添加插件** → 填入本目录绝对路径：
-
-```
-D:/projects/abe-harness-plugin
-```
-
-### 方式 B：GitHub（分发给队友）
-
-先把本仓库推到 GitHub，然后在 **添加插件** 里填：
-
-```
-github:<owner>/abe-harness-plugin
-```
-
-### 方式 C：npm（公开发布）
-
-```powershell
-npm publish
-```
-
-之后 **添加插件** 里填包名：
-
-```
-dsh-plugin-abe-rag
-```
-
-### 方式 D：临时 overlay（不改动用户配置）
-
-在 harness 仓库内执行：
-
-```powershell
-pnpm dsh web --patch D:/projects/abe-harness-plugin/cordis.yml
-```
-
-## 验证
-
-1. 问 Agent：`调用 abe_rag_health` → 返回状态、集合、维度、片段数
-2. 问：`CP-ABE 和 KP-ABE 有什么区别？` → 调用 `abe_qa`，答案带 `[1]`，末尾有"引用来源"列表
-3. 问：`ABE 怎么和格基后量子密码结合？` → 返回拒答与原因
-
-## 卸载
-
-插件面板中禁用或移除即可；工具随插件生命周期出现/消失。
-
-## 常见问题
-
-| 现象 | 处理 |
-| --- | --- |
-| 插件不激活，报 `parameters.xxx.required must be true when present` | 可选参数要**省略** `required` 字段，不能写 `false` |
-| 工具调用报 `ABE RAG 服务返回 500` | Java 服务未启动或内部报错，查看其窗口日志 |
-| 报 401 | Java 服务未设置模型 key |
-| 报 403 | `/ask` 被门控拦截，需 `abe.rag.dev-endpoints.enabled=true` |
-| 与 profile 里手写条目 id 重复导致激活失败 | 二者只能保留一个：`id: abe-rag` |
+| Java RAG 服务 | `http://127.0.0.1:8080`（可用 `ABE_RAG_BASE_URL` 覆盖） |
+| 必需接口 | `POST /internal/rag/ask`、`GET /internal/rag/health` |
