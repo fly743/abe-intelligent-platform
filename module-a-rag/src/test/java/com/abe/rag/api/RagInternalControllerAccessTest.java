@@ -7,6 +7,7 @@ import static org.mockito.Mockito.*;
 import com.abe.rag.config.RagProperties;
 import com.abe.rag.corpus.CorpusIngestService;
 import com.abe.rag.corpus.IngestReport;
+import com.abe.rag.qa.RagQaService;
 import com.abe.rag.retrieve.RagRetrievalService;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +22,7 @@ import org.springframework.web.server.ResponseStatusException;
 class RagInternalControllerAccessTest {
     private CorpusIngestService ingest;
     private RagRetrievalService retrieval;
+    private RagQaService qa;
     private RagProperties properties;
     private RagInternalController controller;
 
@@ -28,8 +30,9 @@ class RagInternalControllerAccessTest {
     void setUp() {
         ingest = mock(CorpusIngestService.class);
         retrieval = mock(RagRetrievalService.class);
+        qa = mock(RagQaService.class);
         properties = new RagProperties();
-        controller = new RagInternalController(ingest, retrieval, properties);
+        controller = new RagInternalController(ingest, retrieval, qa, properties);
         when(ingest.ingest(anyBoolean())).thenReturn(new IngestReport("test", "docs", 1, 1, 1, 0, List.of()));
     }
 

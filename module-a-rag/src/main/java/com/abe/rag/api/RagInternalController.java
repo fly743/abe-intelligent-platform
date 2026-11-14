@@ -3,6 +3,8 @@ package com.abe.rag.api;
 import com.abe.rag.config.RagProperties;
 import com.abe.rag.corpus.CorpusIngestService;
 import com.abe.rag.corpus.IngestReport;
+import com.abe.rag.qa.AskResult;
+import com.abe.rag.qa.RagQaService;
 import com.abe.rag.retrieve.RagRetrievalService;
 import com.abe.rag.retrieve.RetrievedSnippet;
 import java.util.LinkedHashMap;
@@ -22,15 +24,19 @@ public class RagInternalController {
 
     private final CorpusIngestService ingestService;
     private final RagRetrievalService retrievalService;
+    private final RagQaService qaService;
     private final RagProperties properties;
 
     public RagInternalController(CorpusIngestService ingestService,
                                  RagRetrievalService retrievalService,
+                                 RagQaService qaService,
                                  RagProperties properties) {
         this.ingestService = ingestService;
         this.retrievalService = retrievalService;
+        this.qaService = qaService;
         this.properties = properties;
     }
+
 
     @GetMapping("/health")
     public Map<String, Object> health() {
@@ -76,4 +82,12 @@ public class RagInternalController {
         result.put("context", retrievalService.buildContext(snippets));
         return result;
     }
+
+    /** 问答：检索 + 生成，返回带引用编号的答案。 */
+    @PostMapping("/ask")
+    public AskResult ask(@RequestParam("q") String question,
+                         @RequestParam(required = false) Integer topK) {
+        return qaService.ask(question, topK);
+    }
+
 }

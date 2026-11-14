@@ -11,6 +11,8 @@ public class RagProperties {
     private final Retrieve retrieve = new Retrieve();
     private final Ingest ingest = new Ingest();
     private final DevEndpoints devEndpoints = new DevEndpoints();
+    private final Chat chat = new Chat();
+
 
     public boolean isEnabled() { return enabled; }
     public void setEnabled(boolean enabled) { this.enabled = enabled; }
@@ -19,6 +21,8 @@ public class RagProperties {
     public Retrieve getRetrieve() { return retrieve; }
     public Ingest getIngest() { return ingest; }
     public DevEndpoints getDevEndpoints() { return devEndpoints; }
+    public Chat getChat() { return chat; }
+
 
     public static class DevEndpoints {
         private boolean ingestEnabled = false;
@@ -104,4 +108,25 @@ public class RagProperties {
         public boolean isIncludeQa() { return includeQa; }
         public void setIncludeQa(boolean v) { this.includeQa = v; }
     }
+
+    /** 对话模型：与 embedding 是两个不同端点，必须分开配置。 */
+    public static class Chat {
+        private String baseUrl = "https://api.deepseek.com";
+        private String apiKey = "";
+        private String model = "deepseek-chat";
+        private double temperature = 0.2D;
+        private int maxTokens = 1024;
+
+        public String getBaseUrl() { return baseUrl; }
+        public void setBaseUrl(String v) { this.baseUrl = v; }
+        public String getApiKey() { return apiKey; }
+        public void setApiKey(String v) { this.apiKey = v; }
+        public String getModel() { return model; }
+        public void setModel(String v) { this.model = v; }
+        public double getTemperature() { return temperature; }
+        public void setTemperature(double v) { this.temperature = v; }
+        public int getMaxTokens() { return maxTokens; }
+        public void setMaxTokens(int v) { this.maxTokens = v; }
+    }
+
 }
