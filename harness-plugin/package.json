@@ -1,0 +1,46 @@
+{
+  "name": "abe-qa",
+  "version": "0.1.1",
+  "description": "ABE 属性基加密知识库问答：答案附带可核查的引用来源，证据不足时明确拒答",
+  "displayName": "ABE知识问答",
+  "title": "ABE知识问答",
+  "type": "module",
+  "main": "lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./package.json": "./package.json",
+    "./cordis.patch.yml": "./cordis.patch.yml"
+  },
+  "files": [
+    "lib",
+    "src",
+    "cordis.patch.yml",
+    "README.md"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml",
+      "title": {
+        "zh-CN": "ABE知识问答",
+        "en-US": "ABE Knowledge QA"
+      },
+      "description": {
+        "zh-CN": "答案附带可核查的引用来源，证据不足时明确拒答",
+        "en-US": "Answers with verifiable citations; refuses when evidence is insufficient"
+      }
+    }
+  },
+  "keywords": [
+    "dsh-plugin",
+    "dsh-bundle",
+    "deepseek-harness",
+    "cordis",
+    "abe",
+    "rag"
+  ],
+  "license": "MIT",
+  "peerDependencies": {
+    "@deepseek-ai/cordis": "*",
+    "@deepseek-ai/dsh-tools": "*"
+  }
+}
