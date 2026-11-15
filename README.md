@@ -7,7 +7,7 @@
 ## 模块
 
 - `module-a-rag/`：ABE 知识问答/RAG，当前已有语料切分、向量入库与检索代码。
-- `module-b-codegen/`：ABE 代码生成与验证，当前为 Maven 模块骨架，功能待开发。
+- `module-b-codegen/`：ABE 代码生成与验证，已有策略解析、BSW 策略转换和内存密码适配；生成与受限执行尚待实现，构建准备见 [B 模块说明](module-b-codegen/README.md)。
 - `module-c-web/`：Web 展示，当前为 Maven 模块骨架，功能待开发。
 - `module-d-integration/`：系统入口与集成，目前包含 Spring Boot 应用、配置及对 RAG 模块的依赖。
 - `deploy/`：当前包含 Qdrant Docker Compose 配置。
@@ -17,7 +17,7 @@
 
 A 模块已经实现 RAG 数据准备和召回链路的主要基础：Markdown front matter/章节切分、元数据保留、Qdrant 批量入库及幂等 ID、相似度检索、来源片段与上下文组装，以及内部 health/ingest/search/context 调试接口。现有正式语料包括 BSW 2007、Waters 2011、Li 等 2013、GPSW 2006、Chase 2007 五篇论文的知识笔记、分类 QA 和综合对比，分别存储在 `abe_knowledge` 和 `abe_knowledge_qa`；旧联调 FAQ 与工程草稿已清理。真实服务测试须显式开启且可能收费。
 
-目前没有发现基于检索片段生成最终问答的服务或 Harness/Cordis 插件适配实现，因此 A 项仍需补充领域资料、问答生成/引用策略和插件接入。B、C 尚无业务源码；D 有应用启动类及运行配置，但还没有完整系统集成和测试流程。仓库没有证据表明整体 MVP 已打通。
+截至 2026-11-13，尚未发现基于检索片段生成最终问答的服务或 Harness/Cordis 插件适配实现；C 尚无业务源码，D 有应用启动类及运行配置，但还没有完整系统集成和测试流程。B 的后续进展见模块说明。仓库没有证据表明整体 MVP 已打通。
 
 2026-11-13 指定本机 Maven 缓存离线运行 `mvn -o "-Dmaven.repo.local=C:\Users\fly\.m2\repository" test` 成功：A 模块 4 项测试通过，B、C、D 暂无测试。Maven 离线选项只限制依赖解析；后续确认测试上下文可能注入假 embedding，不能将该次结果作为真实 embedding 服务已验证的证据。
 
