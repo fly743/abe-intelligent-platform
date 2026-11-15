@@ -12,7 +12,17 @@
 
     <artifactId>module-b-codegen</artifactId>
 
+    <repositories>
+        <repository>
+            <id>abe-bsw-local</id>
+            <url>file:///${project.basedir}/.bsw-local/repository</url>
+        </repository>
+    </repositories>
     <dependencies>
-        <!-- 以后在这里添加 Bouncy Castle 密码库等依赖 -->
+        <dependency>
+            <groupId>com.abe.vendor</groupId>
+            <artifactId>bsw-core</artifactId>
+            <version>0e71de17ed</version>
+        </dependency>
     </dependencies>
 </project>

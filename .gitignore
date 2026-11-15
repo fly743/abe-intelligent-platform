@@ -12,3 +12,4 @@ out/
 *.iml
 logs/
 qdrant_storage/
+module-b-codegen/.bsw-local/
