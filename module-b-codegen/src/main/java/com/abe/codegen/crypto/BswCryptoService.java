@@ -11,6 +11,7 @@ import com.abe.codegen.policy.BswPolicyConverter;
 import com.abe.codegen.policy.PolicyNode;
 import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
+import java.security.MessageDigest;
 import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.List;
@@ -19,18 +20,123 @@ import javax.crypto.Mac;
 import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
-/** 内存中的 BSW 与 AES-GCM 适配；密钥和密文持久化由后续阶段设计。 */
+/** BSW 与 AES-GCM 适配；敏感密钥字节的保护和存储由调用方负责。 */
 public final class BswCryptoService {
     private static final byte[] INFO = "abe-bsw-aes-gcm-v1".getBytes(StandardCharsets.US_ASCII);
     private static final int MAX_PLAINTEXT = 1024 * 1024;
-    private final BswabePub publicKey = new BswabePub();
-    private final BswabeMsk masterKey = new BswabeMsk();
+    private final BswabePub publicKey;
+    private final BswabeMsk masterKey;
+    private final byte[] systemId;
     private final SecureRandom random = new SecureRandom();
     private final BswPolicyConverter converter = new BswPolicyConverter();
 
-    public BswCryptoService() { Bswabe.setup(publicKey, masterKey); }
+    public BswCryptoService() {
+        publicKey = new BswabePub(); masterKey = new BswabeMsk();
+        Bswabe.setup(publicKey, masterKey);
+        systemId = BswPersistence.id(SerializeUtils.serializeBswabePub(publicKey));
+    }
+
+    private BswCryptoService(BswabePub pub, BswabeMsk msk, byte[] id) {
+        publicKey = pub; masterKey = msk; systemId = id;
+    }
+
+    public synchronized byte[] exportPublicKey() {
+        return BswPersistence.pack(1, systemId, SerializeUtils.serializeBswabePub(publicKey));
+    }
+
+    /** 返回未加密的敏感数据；调用方必须使用受保护的密钥存储。 */
+    public synchronized byte[] exportMasterKey() {
+        if (masterKey == null) throw new IllegalStateException("当前实例没有主密钥");
+        byte[] serialized = SerializeUtils.serializeBswabeMsk(masterKey);
+        try { return BswPersistence.pack(2, systemId, serialized); }
+        finally { Arrays.fill(serialized, (byte) 0); }
+    }
+
+    /** 导出口令保护的主密钥；调用方负责清理口令数组。 */
+    public synchronized byte[] exportProtectedMasterKey(char[] password) throws GeneralSecurityException {
+        byte[] plain = exportMasterKey();
+        try { return BswKeyProtection.protect(plain, 2, password); }
+        finally { Arrays.fill(plain, (byte) 0); }
+    }
+
+    public static BswCryptoService restoreProtected(byte[] publicData, byte[] protectedMaster, char[] password)
+            throws GeneralSecurityException {
+        byte[] plain = BswKeyProtection.unprotect(protectedMaster, 2, password);
+        try { return restore(publicData, plain); }
+        finally { Arrays.fill(plain, (byte) 0); }
+    }
+
+    /** 获取公开参数指纹；指纹本身仍需通过独立可信渠道确认。 */
+    public static byte[] publicKeyFingerprint(byte[] publicData) {
+        byte[] pubBytes = BswPersistence.unpack(publicData, 1, null);
+        BswBinaryValidator.publicKey(pubBytes);
+        byte[] id = BswPersistence.id(pubBytes);
+        BswPersistence.unpack(publicData, 1, id);
+        return id;
+    }
+
+    /** 在调用方提供独立可信指纹时，拒绝不匹配的公开参数。 */
+    public static void verifyPublicKeyFingerprint(byte[] publicData, byte[] trustedFingerprint) {
+        if (trustedFingerprint == null || trustedFingerprint.length != 32
+                || !MessageDigest.isEqual(publicKeyFingerprint(publicData), trustedFingerprint)) {
+            throw new IllegalArgumentException("公开参数与可信指纹不匹配");
+        }
+    }
+
+    public static BswCryptoService restore(byte[] publicData, byte[] masterData) {
+        byte[] pubBytes = BswPersistence.unpack(publicData, 1, null);
+        BswBinaryValidator.publicKey(pubBytes);
+        byte[] id = BswPersistence.id(pubBytes);
+        BswPersistence.unpack(publicData, 1, id);
+        byte[] masterBytes = masterData == null ? null : BswPersistence.unpack(masterData, 2, id);
+        try {
+            if (masterBytes != null) BswBinaryValidator.masterKey(masterBytes);
+            BswabePub pub = SerializeUtils.unserializeBswabePub(pubBytes);
+            BswabeMsk msk = masterBytes == null ? null : SerializeUtils.unserializeBswabeMsk(pub, masterBytes);
+            return new BswCryptoService(pub, msk, id);
+        } finally { if (masterBytes != null) Arrays.fill(masterBytes, (byte) 0); }
+    }
+
+    public synchronized byte[] exportUserKey(UserKey key) {
+        if (key == null || key.owner != this) throw new IllegalArgumentException("密钥不属于当前系统实例");
+        byte[] serialized = SerializeUtils.serializeBswabePrv(key.value);
+        try { return BswPersistence.pack(3, systemId, serialized); }
+        finally { Arrays.fill(serialized, (byte) 0); }
+    }
+
+    public synchronized byte[] exportProtectedUserKey(UserKey key, char[] password) throws GeneralSecurityException {
+        byte[] plain = exportUserKey(key);
+        try { return BswKeyProtection.protect(plain, 3, password); }
+        finally { Arrays.fill(plain, (byte) 0); }
+    }
+
+    public synchronized UserKey importProtectedUserKey(byte[] protectedKey, char[] password) throws GeneralSecurityException {
+        byte[] plain = BswKeyProtection.unprotect(protectedKey, 3, password);
+        try { return importUserKey(plain); }
+        finally { Arrays.fill(plain, (byte) 0); }
+    }
+
+    public synchronized UserKey importUserKey(byte[] encoded) {
+        byte[] bytes = BswPersistence.unpack(encoded, 3, systemId);
+        try {
+            BswBinaryValidator.userKey(bytes);
+            return new UserKey(this, SerializeUtils.unserializeBswabePrv(publicKey, bytes));
+        } finally { Arrays.fill(bytes, (byte) 0); }
+    }
+
+    public synchronized byte[] exportCiphertext(EncryptedData data) {
+        if (data == null || data.owner != this) throw new IllegalArgumentException("密文不属于当前系统实例");
+        return BswPersistence.packCiphertext(systemId, data.policyCiphertext, data.salt, data.nonce, data.data);
+    }
+
+    public synchronized EncryptedData importCiphertext(byte[] encoded) {
+        byte[][] fields = BswPersistence.unpackCiphertext(encoded, systemId);
+        BswBinaryValidator.ciphertext(fields[0]);
+        return new EncryptedData(this, fields[0], fields[1], fields[2], fields[3]);
+    }
 
     public synchronized UserKey generateKey(List<String> attributes) throws GeneralSecurityException {
+        if (masterKey == null) throw new IllegalStateException("当前实例没有主密钥");
         String[] encoded = AttributeRules.validateAttributes(attributes).stream().map(converter::encodeAttribute).toArray(String[]::new);
         return new UserKey(this, Bswabe.keygen(publicKey, masterKey, encoded));
     }
