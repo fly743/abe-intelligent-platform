@@ -7,7 +7,7 @@
 ## 模块
 
 - `module-a-rag/`：ABE 知识问答/RAG，当前已有语料切分、向量入库与检索代码。
-- `module-b-codegen/`：ABE 代码生成与验证，已有策略解析、BSW 策略转换和内存密码适配；生成与受限执行尚待实现，构建准备见 [B 模块说明](module-b-codegen/README.md)。
+- `module-b-codegen/`：ABE 代码生成与验证，已有策略解析、BSW 密码适配、Java 示例生成和 Docker 执行原型；已有统一调用与基础执行异常分类，尚未完成系统集成，构建准备见 [B 模块说明](module-b-codegen/README.md)。
 - `module-c-web/`：Web 展示，当前为 Maven 模块骨架，功能待开发。
 - `module-d-integration/`：系统入口与集成，目前包含 Spring Boot 应用、配置及对 RAG 模块的依赖。
 - `deploy/`：当前包含 Qdrant Docker Compose 配置。
