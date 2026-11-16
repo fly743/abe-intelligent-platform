@@ -1,4 +1,4 @@
-$ErrorActionPreference = 'Stop'
+﻿$ErrorActionPreference = 'Stop'
 $commit = '0e71de17ed64729f2de811503a7958673691e77a'
 $expected = 'E0298FF2F23073AC141E333C01C3063E9544ABAB66E921425647FFD7FE47978B'
 $moduleDir = (Resolve-Path (Join-Path $PSScriptRoot '..')).Path

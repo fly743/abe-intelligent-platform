@@ -1,4 +1,4 @@
-$ErrorActionPreference = 'Stop'
+﻿$ErrorActionPreference = 'Stop'
 $root = Split-Path -Parent $PSScriptRoot
 $repo = Join-Path $root '.bsw-local/repository/com/abe/vendor'
 $cp = @((Join-Path $root 'target/classes'), (Join-Path $repo 'bsw-core/0e71de17ed/bsw-core-0e71de17ed.jar'), (Join-Path $repo 'jpbc-api/0e71de17ed/jpbc-api-0e71de17ed.jar'), (Join-Path $repo 'jpbc-plaf/0e71de17ed/jpbc-plaf-0e71de17ed.jar'), (Join-Path $root 'target')) -join ';'
