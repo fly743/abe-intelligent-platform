@@ -8026,62 +8026,43 @@ function toolAbortedBeforeDispatchResult(prior) {
 var name = "abe-rag";
 var inject = ["tools"];
 var BASE_URL = process.env.ABE_RAG_BASE_URL ?? "http://127.0.0.1:8080";
-var ERROR_HINT = {
-  401: "Java \u670D\u52A1\u672A\u914D\u7F6E\u6A21\u578B key\uFF08\u5728\u542F\u52A8\u670D\u52A1\u7684\u7A97\u53E3\u91CC\u8BBE\u7F6E\u73AF\u5883\u53D8\u91CF\uFF09",
-  403: "\u63A5\u53E3\u88AB\u95E8\u63A7\u62E6\u622A\uFF08/ask \u9700\u8981 abe.rag.dev-endpoints.enabled=true\uFF09",
-  500: "Java \u670D\u52A1\u5185\u90E8\u9519\u8BEF\uFF0C\u67E5\u770B\u670D\u52A1\u7A97\u53E3\u65E5\u5FD7"
-};
-async function requestJson(path, init) {
-  const res = await fetch(`${BASE_URL}${path}`, init);
+async function postJson(url) {
+  const res = await fetch(url, { method: "POST" });
   const text = await res.text();
   if (!res.ok) {
-    const hint = ERROR_HINT[res.status] ?? "\u672A\u77E5\u9519\u8BEF";
-    throw new Error(`ABE RAG \u670D\u52A1\u8FD4\u56DE ${res.status}\uFF08${hint}\uFF09\uFF1A${text.slice(0, 300)}`);
+    throw new Error(`ABE RAG \u670D\u52A1\u8FD4\u56DE ${res.status}: ${text.slice(0, 200)}`);
   }
-  try {
-    return JSON.parse(text);
-  } catch {
-    throw new Error(`ABE RAG \u670D\u52A1\u8FD4\u56DE\u975E JSON \u5185\u5BB9\uFF1A${text.slice(0, 300)}`);
-  }
+  return text ? JSON.parse(text) : {};
 }
-function formatCitations(citations) {
-  if (!citations.length) return "\uFF08\u65E0\u5F15\u7528\uFF09";
-  return citations.map((c) => {
-    const ref = c.ref ? `[${c.ref}] ` : "";
-    const where = [c.title, c.section].filter(Boolean).join(" \xB7 ");
-    const src = c.source ? ` \u2014 \`${c.source}\`` : "";
-    const score = typeof c.score === "number" ? `\uFF08\u76F8\u4F3C\u5EA6 ${c.score.toFixed(2)}\uFF09` : "";
-    return `- ${ref}${where || c.docId || "\u672A\u547D\u540D\u7247\u6BB5"}${src}${score}`;
-  }).join("\n");
-}
-function formatAnswer(data) {
-  const answer = (data.answer ?? "").trim();
-  if (data.refused) {
-    return [`**\u62D2\u7B54**\uFF1A${answer || "\u6839\u636E\u73B0\u6709\u8D44\u6599\u65E0\u6CD5\u786E\u5B9A\u3002"}`, `> \u539F\u56E0\uFF1A${data.reason ?? "\u8BC1\u636E\u4E0D\u8DB3"}`].join(
-      "\n\n"
-    );
+function renderAnswer(value) {
+  const lines = [];
+  lines.push(value.answer.trim());
+  lines.push("");
+  if (value.citations.length > 0) {
+    lines.push("---");
+    lines.push("\u5F15\u7528\u6765\u6E90");
+    lines.push("");
+    for (const c of value.citations) {
+      const where = c.section ? `${c.title} \xB7 ${c.section}` : c.title;
+      lines.push(`[${c.ref}] ${where} \u2014 \`${c.source}\`\uFF08\u76F8\u4F3C\u5EA6 ${c.score.toFixed(2)}\uFF09`);
+    }
+  } else {
+    lines.push("> \u672A\u4EA7\u751F\u5F15\u7528\uFF1A\u672C\u6B21\u56DE\u7B54\u6CA1\u6709\u5F15\u7528\u4EFB\u4F55\u7247\u6BB5\uFF08\u68C0\u7D22\u4E3A\u7A7A\u6216\u6A21\u578B\u5224\u5B9A\u8BC1\u636E\u4E0D\u8DB3\uFF09");
   }
-  const parts = [answer];
-  parts.push(`---
-**\u5F15\u7528\u6765\u6E90**
-${formatCitations(data.citations ?? [])}`);
-  const meta = [];
-  if (typeof data.retrievedCount === "number") meta.push(`\u53EC\u56DE ${data.retrievedCount} \u6761`);
-  if (data.invalidRefs?.length) meta.push(`\u65E0\u6548\u5F15\u7528\u7F16\u53F7 ${data.invalidRefs.join(",")}`);
-  if (typeof data.latencyMs === "number") meta.push(`\u8017\u65F6 ${data.latencyMs}ms`);
-  if (meta.length) parts.push(`> ${meta.join(" \xB7 ")}`);
-  return parts.join("\n\n");
+  lines.push("");
+  lines.push(`<sub>\u8017\u65F6 ${(value.latencyMs / 1e3).toFixed(2)}s</sub>`);
+  return lines.join("\n");
 }
 function apply(ctx) {
   ctx.tools.register(
     defineTool({
       name: "abe_qa",
-      description: "\u57FA\u4E8E ABE\uFF08\u5C5E\u6027\u57FA\u52A0\u5BC6\uFF09\u77E5\u8BC6\u5E93\u56DE\u7B54\u95EE\u9898\u3002\u7B54\u6848\u5E26 [n] \u5F15\u7528\u7F16\u53F7\uFF0C\u968F\u9644\u53EF\u6838\u67E5\u7684\u6765\u6E90\uFF08\u8BBA\u6587/\u6587\u6863\u51FA\u5904\uFF09\u3002\u77E5\u8BC6\u5E93\u672A\u8986\u76D6\u7684\u95EE\u9898\u4F1A\u660E\u786E\u62D2\u7B54\uFF0C\u4E0D\u7F16\u9020\u3002\u9002\u7528\u4E8E ABE \u6982\u5FF5\u3001\u65B9\u6848\u5BF9\u6BD4\u3001\u5BC6\u7801\u5B66\u5B9E\u73B0\u7EC6\u8282\u7B49\u63D0\u95EE\u3002",
+      description: "\u57FA\u4E8E ABE\uFF08\u5C5E\u6027\u57FA\u52A0\u5BC6\uFF09\u77E5\u8BC6\u5E93\u56DE\u7B54\u95EE\u9898\uFF0C\u7B54\u6848\u9644\u5E26\u53EF\u6838\u67E5\u7684\u5F15\u7528\u6765\u6E90\uFF1B\u77E5\u8BC6\u5E93\u672A\u8986\u76D6\u7684\u95EE\u9898\u4F1A\u660E\u786E\u62D2\u7B54\u3002\u56DE\u7B54 ABE \u76F8\u5173\u6982\u5FF5\u3001\u65B9\u6848\u5BF9\u6BD4\u3001\u5B9E\u73B0\u7EC6\u8282\u65F6\u4F18\u5148\u4F7F\u7528\u672C\u5DE5\u5177\u3002",
       parameters: {
         question: {
           type: "string",
           required: true,
-          description: "\u7528\u6237\u7684\u95EE\u9898\uFF0C\u4F7F\u7528\u4E2D\u6587\u81EA\u7136\u8BED\u8A00"
+          description: "\u7528\u6237\u7684\u95EE\u9898\uFF0C\u4E2D\u6587\u81EA\u7136\u8BED\u8A00"
         },
         topK: {
           type: "number",
@@ -8089,36 +8070,77 @@ function apply(ctx) {
         }
       },
       output: {
-        schema: { type: "string" },
-        render: (_args, value) => [{ type: "text", text: String(value) }]
+        schema: {
+          type: "object",
+          additionalProperties: false,
+          properties: {
+            answer: { type: "string" },
+            refused: { type: "boolean" },
+            latencyMs: { type: "number" },
+            citations: {
+              type: "array",
+              items: {
+                type: "object",
+                additionalProperties: false,
+                properties: {
+                  ref: { type: "number" },
+                  docId: { type: "string" },
+                  title: { type: "string" },
+                  section: { type: "string" },
+                  source: { type: "string" },
+                  score: { type: "number" }
+                }
+              }
+            }
+          }
+        },
+        render: (_args, value) => [{ type: "text", text: renderAnswer(value) }]
       },
       async execute(args) {
         const topK = Math.min(Math.max(args.topK ?? 3, 1), 8);
-        const query = encodeURIComponent(args.question);
-        const data = await requestJson(`/internal/rag/ask?q=${query}&topK=${topK}`, {
-          method: "POST"
-        });
-        return formatAnswer(data);
+        const url = `${BASE_URL}/internal/rag/ask?q=${encodeURIComponent(args.question)}&topK=${topK}`;
+        const data = await postJson(url);
+        return {
+          answer: data.answer ?? "",
+          refused: Boolean(data.refused),
+          latencyMs: Number(data.latencyMs ?? 0),
+          citations: (data.citations ?? []).map((c) => ({
+            ref: Number(c.ref ?? 0),
+            docId: String(c.docId ?? ""),
+            title: String(c.title ?? ""),
+            section: String(c.section ?? ""),
+            source: String(c.source ?? ""),
+            score: Number(c.score ?? 0)
+          }))
+        };
       }
     })
   );
   ctx.tools.register(
     defineTool({
       name: "abe_rag_health",
-      description: "\u68C0\u67E5 ABE \u77E5\u8BC6\u5E93\u670D\u52A1\u662F\u5426\u53EF\u7528\uFF1A\u8FD4\u56DE\u96C6\u5408\u540D\u3001embedding \u6A21\u578B\u3001\u5411\u91CF\u7EF4\u5EA6\u4E0E\u5DF2\u5165\u5E93\u7247\u6BB5\u6570\u3002",
+      description: "\u68C0\u67E5 ABE \u77E5\u8BC6\u5E93\u670D\u52A1\u72B6\u6001\uFF1A\u96C6\u5408\u540D\u3001embedding \u6A21\u578B\u3001\u5411\u91CF\u7EF4\u5EA6\u3001\u5DF2\u5165\u5E93\u7247\u6BB5\u6570\u3002",
       parameters: {},
       output: {
         schema: { type: "string" },
-        render: (_args, value) => [{ type: "text", text: String(value) }]
+        render: (_args, value) => [{ type: "text", text: value }]
       },
       async execute() {
-        const data = await requestJson("/internal/rag/health");
-        return [
-          `\u72B6\u6001\uFF1A${data.status ?? "\u672A\u77E5"}`,
+        const res = await fetch(`${BASE_URL}/internal/rag/health`);
+        if (!res.ok) {
+          throw new Error(`ABE RAG \u670D\u52A1\u8FD4\u56DE ${res.status}`);
+        }
+        const data = await res.json();
+        const lines = [
+          `\u72B6\u6001\uFF1A${data.status ?? "UNKNOWN"}`,
           `\u96C6\u5408\uFF1A${data.collection ?? "-"}`,
           `embedding\uFF1A${data.embeddingModel ?? "-"}\uFF08${data.dimensions ?? "-"} \u7EF4\uFF09`,
           `\u7247\u6BB5\u6570\uFF1A${data.points ?? "-"}`
-        ].join("\n");
+        ];
+        if (data.chatModel) {
+          lines.push(`chat\uFF1A${data.chatModel}`);
+        }
+        return lines.join("\n");
       }
     })
   );
