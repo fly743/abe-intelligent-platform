@@ -15,6 +15,11 @@
     <dependencies>
         <dependency>
             <groupId>com.abe</groupId>
+            <artifactId>module-b-codegen</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.abe</groupId>
             <artifactId>module-a-rag</artifactId>
             <version>${project.version}</version>
         </dependency>
