@@ -6,32 +6,17 @@
 
 ## 模块
 
-- `module-a-rag/`：ABE 知识问答/RAG，当前已有语料切分、向量入库与检索代码。
+- `module-a-rag/`：ABE 知识问答/RAG，已有语料、检索、问答和 Harness 插件。
 - `module-b-codegen/`：ABE 代码生成与验证，已有策略解析、BSW 密码适配、Java 示例生成和 Docker 执行原型；已有统一调用与基础执行异常分类，尚未完成系统集成，构建准备见 [B 模块说明](module-b-codegen/README.md)。
 - `module-c-web/`：Web 展示，当前为 Maven 模块骨架，功能待开发。
-- `module-d-integration/`：系统入口与集成，目前包含 Spring Boot 应用、配置及对 RAG 模块的依赖。
+- `module-d-integration/`：系统入口与集成，包含 Spring Boot 应用、配置及对 A、B 模块的依赖。
 - `deploy/`：当前包含 Qdrant Docker Compose 配置。
 - `docs/项目背景与任务记忆.md`：项目背景、图片规定的实施顺序、报告分工参考和基于仓库证据的进度记录。
 
-## 当前进度（2026-11-13）
+## 当前进度
 
-A 模块已经实现 RAG 数据准备和召回链路的主要基础：Markdown front matter/章节切分、元数据保留、Qdrant 批量入库及幂等 ID、相似度检索、来源片段与上下文组装，以及内部 health/ingest/search/context 调试接口。现有正式语料包括 BSW 2007、Waters 2011、Li 等 2013、GPSW 2006、Chase 2007 五篇论文的知识笔记、分类 QA 和综合对比，分别存储在 `abe_knowledge` 和 `abe_knowledge_qa`；旧联调 FAQ 与工程草稿已清理。真实服务测试须显式开启且可能收费。
-
-截至 2026-11-13，尚未发现基于检索片段生成最终问答的服务或 Harness/Cordis 插件适配实现；C 尚无业务源码，D 有应用启动类及运行配置，但还没有完整系统集成和测试流程。B 的后续进展见模块说明。仓库没有证据表明整体 MVP 已打通。
-
-2026-11-13 指定本机 Maven 缓存离线运行 `mvn -o "-Dmaven.repo.local=C:\Users\fly\.m2\repository" test` 成功：A 模块 4 项测试通过，B、C、D 暂无测试。Maven 离线选项只限制依赖解析；后续确认测试上下文可能注入假 embedding，不能将该次结果作为真实 embedding 服务已验证的证据。
-
-## 建议推进
-
-按图片顺序先完成 A：补齐带可靠出处的 ABE 原理、算法和应用语料；围绕概念解释、方案对比和常见问题准备问题集；在现有召回基础上实现回答与引用返回，明确证据不足时的处理方式；再接入插件并评估效果。随后推进 B 代码生成/验证、C Web 展示，最后进行 D 集成测试。各成员按选题报告原分工协作，顺序不因此改变。
+A 已有检索、问答及 Harness 插件，见 [A 模块说明](module-a-rag/README.md)。B 已有固定 Java 示例生成、Docker 验证、内部 HTTP 接口及独立 Harness 插件，见 [B 插件说明](harness-plugin/abe-codegen/README.md)。C 仍为骨架，D 提供集成启动入口；完整系统集成与测试仍待完成。
 
 ## 协作约定
 
 不要提交 API Key、数据库密码、`.env` 文件或本地数据库数据。技术选型和实现方案按团队最新决定更新。
-
-
-
-
-
-
-

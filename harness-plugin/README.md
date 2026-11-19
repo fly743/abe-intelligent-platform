@@ -2,6 +2,8 @@
 
 DeepSeek Harness 业务插件集合。每个子目录是一个**可独立安装的 npm 包**。
 
+B 模块的独立代码生成插件见 [abe-codegen](abe-codegen/README.md)，与 A 的 abe-qa 分别安装、分别配置。
+
 ## 目录结构
 
 ```

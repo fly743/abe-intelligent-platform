@@ -1,0 +1,42 @@
+{
+  "name": "harness-plugin-abe-codegen",
+  "version": "0.1.0",
+  "description": "ABE 属性基加密代码生成与验证：根据访问策略和用户属性生成 Java 示例，并通过 Docker 编译运行",
+  "displayName": "ABE代码生成与验证",
+  "title": "ABE代码生成与验证",
+  "type": "module",
+  "main": "lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./package.json": "./package.json",
+    "./cordis.patch.yml": "./cordis.patch.yml"
+  },
+  "files": [
+    "lib",
+    "src",
+    "cordis.patch.yml",
+    "README.md"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml",
+      "title": {
+        "zh-CN": "ABE代码生成",
+        "en-US": "ABE Code Generation"
+      },
+      "description": {
+        "zh-CN": "生成并验证固定 Java 示例",
+        "en-US": "Generate and verify a fixed Java example"
+      }
+    }
+  },
+  "keywords": [
+    "dsh-plugin",
+    "dsh-bundle",
+    "deepseek-harness"
+  ],
+  "peerDependencies": {
+    "@deepseek-ai/cordis": "*",
+    "@deepseek-ai/dsh-tools": "*"
+  }
+}
