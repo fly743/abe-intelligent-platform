@@ -13,3 +13,5 @@ out/
 logs/
 qdrant_storage/
 module-b-codegen/.bsw-local/
+module-a-rag/docs/.cleaned-preview/
+module-a-rag/evaluation/reports/

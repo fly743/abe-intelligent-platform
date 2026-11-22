@@ -1,0 +1,348 @@
+{
+  "version": 1,
+  "collection": "abe_knowledge",
+  "topK": 5,
+  "note": "A case counts as a hit when a returned snippet satisfies: snippet.docId == doc AND snippet.section contains section. Section text is the cleaned heading from A1 (no page-number suffix).",
+  "cases": [
+    {
+      "id": "Q01",
+      "type": "compare",
+      "q": "CP-ABE 和 KP-ABE 到底哪里不一样？是谁把访问策略关联到密文上的？",
+      "relevant": [
+        { "doc": "papers/bsw2007-cp-abe", "section": "3. CP-ABE 与 KP-ABE 的区别" },
+        { "doc": "notes/abe-scheme-comparison", "section": "CP-ABE：策略关联密文" }
+      ]
+    },
+    {
+      "id": "Q02",
+      "type": "fact",
+      "q": "KP-ABE 里访问策略是跟着密文走，还是跟着用户私钥走？",
+      "relevant": [
+        { "doc": "papers/gpsw2006-kp-abe", "section": "1. KP-ABE 核心模型" },
+        { "doc": "notes/abe-scheme-comparison", "section": "KP-ABE：策略关联私钥" }
+      ]
+    },
+    {
+      "id": "Q03",
+      "type": "fact",
+      "q": "访问结构的单调性是什么意思？给用户多加几个属性会不会破坏原来满足的策略？",
+      "relevant": [
+        { "doc": "papers/bsw2007-cp-abe", "section": "4. 访问结构及单调性" },
+        { "doc": "papers/waters2011-cp-abe", "section": "5. 单调访问结构" }
+      ]
+    },
+    {
+      "id": "Q04",
+      "type": "fact",
+      "q": "阈值门怎么表示 AND 和 OR？访问树里的内部节点和叶节点分别是什么？",
+      "relevant": [
+        { "doc": "papers/bsw2007-cp-abe", "section": "5. 访问树和阈值门" },
+        { "doc": "papers/gpsw2006-kp-abe", "section": "4. 访问树与单调性" }
+      ]
+    },
+    {
+      "id": "Q05",
+      "type": "fact",
+      "q": "CP-ABE 一共包含哪几个算法？Setup 之后公开参数和主密钥分别是什么？",
+      "relevant": [
+        { "doc": "papers/bsw2007-cp-abe", "section": "7. 五个算法接口" },
+        { "doc": "papers/bsw2007-cp-abe", "section": "9. Setup 主要公式" }
+      ]
+    },
+    {
+      "id": "Q06",
+      "type": "fact",
+      "q": "双线性配对 e(u^a, v^b) 的性质在解密过程中是怎么用到的？",
+      "relevant": [
+        { "doc": "papers/bsw2007-cp-abe", "section": "8. 双线性映射与符号" }
+      ]
+    },
+    {
+      "id": "Q07",
+      "type": "fact",
+      "q": "加密时选出的随机秘密 s 是怎么沿着访问树一层一层分发下去的？",
+      "relevant": [
+        { "doc": "papers/bsw2007-cp-abe", "section": "10. 加密：秘密沿访问树分发" }
+      ]
+    },
+    {
+      "id": "Q08",
+      "type": "fact",
+      "q": "CP-ABE 的密文里都有哪些分量？访问策略存在密文的哪个位置？",
+      "relevant": [
+        { "doc": "papers/bsw2007-cp-abe", "section": "11. 加密：密文组成" }
+      ]
+    },
+    {
+      "id": "Q09",
+      "type": "fact",
+      "q": "解密时叶节点先算出什么？内部节点怎么用拉格朗日插值往上恢复？",
+      "relevant": [
+        { "doc": "papers/bsw2007-cp-abe", "section": "13. 解密：叶节点匹配与插值" }
+      ]
+    },
+    {
+      "id": "Q10",
+      "type": "fact",
+      "q": "为什么两个各自只有一部分属性的用户，把私钥拼在一起也解不开？",
+      "relevant": [
+        { "doc": "papers/bsw2007-cp-abe", "section": "15. 抗合谋：什么不能合并" }
+      ]
+    },
+    {
+      "id": "Q11",
+      "type": "fact",
+      "q": "BSW 2007 的安全性是在什么模型下证明的？对手优势上界和 q 是什么关系？",
+      "relevant": [
+        { "doc": "papers/bsw2007-cp-abe", "section": "16. 安全游戏及证明思路" }
+      ]
+    },
+    {
+      "id": "Q12",
+      "type": "boundary",
+      "q": "能不能说 BSW 2007 无条件满足选择密文安全？它的证明没有覆盖哪些情况？",
+      "relevant": [
+        { "doc": "papers/bsw2007-cp-abe", "section": "17. 安全结论的边界" }
+      ]
+    },
+    {
+      "id": "Q13",
+      "type": "fact",
+      "q": "论文里用户撤销和数值属性是怎么处理的？cpabe 工具包实现到了什么程度？",
+      "relevant": [
+        { "doc": "papers/bsw2007-cp-abe", "section": "18. 撤销、数值属性及工程实现" }
+      ]
+    },
+    {
+      "id": "Q14",
+      "type": "fact",
+      "q": "多授权机构 ABE 里为什么还需要一个中央机构？它是不是也能解密消息？",
+      "relevant": [
+        { "doc": "papers/chase2007-ma-abe", "section": "5. 可信中央机构的作用与风险" }
+      ]
+    },
+    {
+      "id": "Q15",
+      "type": "fact",
+      "q": "GID 全局用户标识是干什么用的？它防的是跨机构合谋还是同机构内部的合谋？",
+      "relevant": [
+        { "doc": "papers/chase2007-ma-abe", "section": "4. 全局用户标识 GID" },
+        { "doc": "papers/chase2007-ma-abe", "section": "6. 跨机构合谋示例" }
+      ]
+    },
+    {
+      "id": "Q16",
+      "type": "boundary",
+      "q": "Chase 2007 的安全模型里，如果攻击者攻陷了所有属性机构，还能保证机密性吗？",
+      "relevant": [
+        { "doc": "papers/chase2007-ma-abe", "section": "10. 安全游戏和机构损坏边界" }
+      ]
+    },
+    {
+      "id": "Q17",
+      "type": "fact",
+      "q": "KP-ABE 的密钥委托只能派生出更严格的策略吗？能不能借委托扩大权限？",
+      "relevant": [
+        { "doc": "papers/gpsw2006-kp-abe", "section": "12. 密钥委托的限制" }
+      ]
+    },
+    {
+      "id": "Q18",
+      "type": "fact",
+      "q": "GPSW 的大属性域构造里，一次加密用到的属性数量有没有上限？",
+      "relevant": [
+        { "doc": "papers/gpsw2006-kp-abe", "section": "11. 大属性域与规模限制" }
+      ]
+    },
+    {
+      "id": "Q19",
+      "type": "fact",
+      "q": "LSSS 的矩阵是怎么表示访问策略的？线性重构需要哪些行参与？",
+      "relevant": [
+        { "doc": "papers/waters2011-cp-abe", "section": "7. LSSS 线性重构" },
+        { "doc": "papers/waters2011-cp-abe", "section": "6. LSSS 的矩阵与属性映射" }
+      ]
+    },
+    {
+      "id": "Q20",
+      "type": "compare",
+      "q": "Waters 2011 相对 BSW 2007 的核心改进是什么？为什么它的主方案要改用 LSSS？",
+      "relevant": [
+        { "doc": "papers/waters2011-cp-abe", "section": "1. 论文目标及与 BSW 2007 的关系" },
+        { "doc": "papers/waters2011-cp-abe", "section": "2. 三种构造的定位" }
+      ]
+    },
+    {
+      "id": "Q21",
+      "type": "fact",
+      "q": "选择性安全和自适应安全有什么区别？Waters 的主构造达到的是哪一种？",
+      "relevant": [
+        { "doc": "papers/waters2011-cp-abe", "section": "4. 选择性安全与自适应安全" }
+      ]
+    },
+    {
+      "id": "Q22",
+      "type": "fact",
+      "q": "PHR 系统里个人域 PSD 和公共域 PUD 分别用的是哪一类 ABE？",
+      "relevant": [
+        { "doc": "papers/li2013-phr-abe", "section": "4. 个人域 PSD 和公共域 PUD" }
+      ]
+    },
+    {
+      "id": "Q23",
+      "type": "fact",
+      "q": "PHR 公共域里用户属性撤销是怎么做的？前向保密保证到了什么程度？",
+      "relevant": [
+        { "doc": "papers/li2013-phr-abe", "section": "10. 按需属性与用户撤销" },
+        { "doc": "papers/li2013-phr-abe", "section": "11. 撤销和前向保密的边界" }
+      ]
+    },
+    {
+      "id": "Q24",
+      "type": "fact",
+      "q": "为什么只给读权限不够？写权限为什么不能用读权限来替代？",
+      "relevant": [
+        { "doc": "papers/li2013-phr-abe", "section": "12. 为什么读权限不能代替写权限" }
+      ]
+    },
+    {
+      "id": "Q25",
+      "type": "fact",
+      "q": "紧急情况下 break-glass 访问是怎么设计的？",
+      "relevant": [
+        { "doc": "papers/li2013-phr-abe", "section": "14. 紧急访问 break-glass" }
+      ]
+    },
+    {
+      "id": "Q26",
+      "type": "compare",
+      "q": "MA-ABE、CP-ABE、KP-ABE 是三个互斥并列的方案吗？它们各自描述的是什么维度？",
+      "relevant": [
+        { "doc": "papers/chase2007-ma-abe", "section": "2. MA-ABE 与 CP/KP 的关系" },
+        { "doc": "notes/abe-scheme-comparison", "section": "比较维度和来源" }
+      ]
+    },
+    {
+      "id": "Q27",
+      "type": "fact",
+      "q": "KP-ABE 主要能用在哪些场景？审计日志的细粒度共享是怎么实现的？",
+      "relevant": [
+        { "doc": "papers/gpsw2006-kp-abe", "section": "3. 应用和参与角色" }
+      ]
+    },
+    {
+      "id": "Q28",
+      "type": "fact",
+      "q": "KP-ABE 的抗合谋安全游戏是选择性集合安全吗？对手要在什么时候宣布挑战集合？",
+      "relevant": [
+        { "doc": "papers/gpsw2006-kp-abe", "section": "10. 抗合谋与安全模型" }
+      ]
+    },
+    {
+      "id": "Q29",
+      "type": "fact",
+      "q": "Waters 主方案解密时的正确性体现为哪个抵消等式？",
+      "relevant": [
+        { "doc": "papers/waters2011-cp-abe", "section": "12. 主方案解密的抵消关系" }
+      ]
+    },
+    {
+      "id": "Q30",
+      "type": "boundary",
+      "q": "Waters 2011 的效率结论和抗合谋机制分别有哪些适用边界？",
+      "relevant": [
+        { "doc": "papers/waters2011-cp-abe", "section": "17. 效率结论的适用范围" },
+        { "doc": "papers/waters2011-cp-abe", "section": "13. 抗合谋的机制与边界" }
+      ]
+    },
+    {
+      "id": "Q31",
+      "type": "boundary",
+      "q": "BSW 2007 的 CP-ABE 适合什么场景？它的安全结论不能推出哪些东西？",
+      "relevant": [
+        { "doc": "papers/bsw2007-cp-abe", "section": "适用范围与局限" }
+      ]
+    },
+    {
+      "id": "Q32",
+      "type": "boundary",
+      "q": "Chase 2007 是完全去中心化的方案吗？它还依赖什么信任假设？",
+      "relevant": [
+        { "doc": "papers/chase2007-ma-abe", "section": "适用范围与局限" }
+      ]
+    },
+    {
+      "id": "Q33",
+      "type": "boundary",
+      "q": "GPSW 的 KP-ABE 密钥委托能扩大权限吗？它的安全模型有什么限制？",
+      "relevant": [
+        { "doc": "papers/gpsw2006-kp-abe", "section": "适用范围与局限" }
+      ]
+    },
+    {
+      "id": "Q34",
+      "type": "boundary",
+      "q": "Li 等 2013 的 PHR 方案，个人域和公共域分别有哪些局限？",
+      "relevant": [
+        { "doc": "papers/li2013-phr-abe", "section": "适用范围与局限" }
+      ]
+    },
+    {
+      "id": "Q35",
+      "type": "boundary",
+      "q": "Waters 2011 的方案能不能宣称隐藏访问策略？效率结论能外推吗？",
+      "relevant": [
+        { "doc": "papers/waters2011-cp-abe", "section": "适用范围与局限" }
+      ]
+    },
+    {
+      "id": "Q36",
+      "type": "engineering",
+      "q": "本项目 ABE 用的是什么库、什么配对参数？",
+      "relevant": [
+        { "doc": "notes/abe-engineering", "section": "实现选型：BSW 与 jPBC" },
+        { "doc": "notes/abe-engineering", "section": "配对参数与安全等级" }
+      ]
+    },
+    {
+      "id": "Q37",
+      "type": "engineering",
+      "q": "512 位基域的 Type A 参数相当于多少位安全等级？",
+      "relevant": [
+        { "doc": "notes/abe-engineering", "section": "配对参数与安全等级" }
+      ]
+    },
+    {
+      "id": "Q38",
+      "type": "engineering",
+      "q": "CP-ABE 加密时 AES 密钥是怎么从群元素派生出来的？",
+      "relevant": [
+        { "doc": "notes/abe-engineering", "section": "混合加密：KEM 与 AES-GCM" }
+      ]
+    },
+    {
+      "id": "Q39",
+      "type": "engineering",
+      "q": "ABE 密钥和密文序列化时怎么防止跨系统误用？",
+      "relevant": [
+        { "doc": "notes/abe-engineering", "section": "序列化格式与跨实例隔离" }
+      ]
+    },
+    {
+      "id": "Q40",
+      "type": "engineering",
+      "q": "为什么这套 BSW 实现不能直接做密钥委托？",
+      "relevant": [
+        { "doc": "notes/abe-engineering", "section": "上游已知缺陷与外围修补" }
+      ]
+    },
+    {
+      "id": "Q41",
+      "type": "engineering",
+      "q": "项目的策略语法支持哪些运算符，属性长度有什么限制？",
+      "relevant": [
+        { "doc": "notes/abe-engineering", "section": "策略语法与属性规则" }
+      ]
+    }
+  ]
+}

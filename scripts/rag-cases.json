@@ -8,5 +8,12 @@
   { "n": 7,  "k": "FAQ",  "q": "CP-ABE 的密文由哪些部分组成",                      "expect": "papers/bsw2007-cp-abe" },
   { "n": 8,  "k": "FAQ",  "q": "公共域上的策略表达有什么限制",                     "expect": "papers/li2013-phr-abe" },
   { "n": 9,  "k": "FAQ",  "q": "按需属性如何支持用户撤销",                         "expect": "papers/li2013-phr-abe" },
-  { "n": 10, "k": "拒答", "q": "ABE 如何做后量子安全改造，格基方案有哪些",         "expect": "REFUSE" }
+  { "n": 10, "k": "拒答", "q": "ABE 如何做后量子安全改造，格基方案有哪些",         "expect": "REFUSE" },
+  { "n": 11, "k": "概念", "q": "KP-ABE 里访问策略是放在密文还是用户私钥上",        "expect": "papers/gpsw2006-kp-abe" },
+  { "n": 12, "k": "概念", "q": "KP-ABE 的密钥委托能不能扩大权限",                  "expect": "papers/gpsw2006-kp-abe" },
+  { "n": 13, "k": "FAQ",  "q": "多授权机构的中央机构能不能解密消息",                "expect": "papers/chase2007-ma-abe" },
+  { "n": 14, "k": "边界", "q": "BSW 2007 的 CP-ABE 不能推出哪些安全结论",         "expect": "papers/bsw2007-cp-abe" },
+  { "n": 15, "k": "边界", "q": "Chase 2007 是完全去中心化的方案吗",                "expect": "papers/chase2007-ma-abe" },
+  { "n": 16, "k": "工程", "q": "本项目 ABE 用的是什么库和配对参数",                  "expect": "notes/abe-engineering" },
+  { "n": 17, "k": "工程", "q": "为什么这套 BSW 实现不能直接做密钥委托",              "expect": "notes/abe-engineering" }
 ]
