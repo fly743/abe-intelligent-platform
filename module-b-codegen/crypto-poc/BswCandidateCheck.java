@@ -14,7 +14,7 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
-/** 独立候选验证，不属于正式密码接口。仅用于固定场景的功能核查。 */
+/** 验证 BSW 候选方案，不属于正式密码接口。仅用于固定场景的功能核查。 */
 public class BswCandidateCheck {
     private static final byte[] MESSAGE = "重复属性策略跨进程验证".getBytes(StandardCharsets.UTF_8);
     private static SecretKeySpec key(Element element) throws Exception {

@@ -4,7 +4,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 
-/** 首版属性命名与数量约束。 */
+/** 首版属性命名与数量约束，规定属性怎么写。 */
 public final class AttributeRules {
     public static final int MAX_ATTRIBUTES = 64;
     public static final int MAX_NAME_LENGTH = 64;

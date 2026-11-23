@@ -1,7 +1,7 @@
 package com.abe.codegen.policy;
 
 import java.util.Locale;
-
+//把字符串解析成策略树
 /** AND 优先于 OR；运算符忽略大小写，属性区分大小写。 */
 public final class PolicyParser {
     public static final int MAX_LENGTH = 4096;

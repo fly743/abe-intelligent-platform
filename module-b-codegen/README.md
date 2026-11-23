@@ -55,6 +55,23 @@ System.out.println(result.execution().outcome());
 
 运行前需从项目根目录准备依赖、编译模块，并确保运行进程有 Docker Linux 引擎及固定镜像访问权限。当前验证只运行固定模板，执行器仍有创建超时清理竞态等限制，不能用于任意不可信源码。可用 `./module-b-codegen/scripts/check-docker-executor.ps1` 验证统一入口及代表性场景。
 
+该脚本逐项输出 `[PASS]`；断言失败时输出 `[FAIL]` 并以非零状态结束。`DockerExecutorCheck` 通过统一入口覆盖以下 8 个固定验收场景，同时保留原有重复属性、中文、空明文、非法策略和输入大小等检查：
+
+| 访问策略 | 用户属性 | 预期 outcome |
+| --- | --- | --- |
+| `A AND B` | A、B | `SUCCESS` |
+| `A AND B` | A | `POLICY_NOT_SATISFIED` |
+| `A OR B` | A | `SUCCESS` |
+| `A OR B` | C | `POLICY_NOT_SATISFIED` |
+| `A AND (B OR C)` | A、C | `SUCCESS` |
+| `A AND (B OR C)` | C | `POLICY_NOT_SATISFIED` |
+| `(A AND B) OR C` | C | `SUCCESS` |
+| `(A AND B) OR C` | A | `POLICY_NOT_SATISFIED` |
+
+每个固定场景同时检查源码存在、生成及编译成功、运行结果和清理状态；预期拒绝且实际为 `POLICY_NOT_SATISFIED` 表示该用例通过。失败输出包含策略、属性、预期与实际状态，不输出明文。
+
+`DockerFailureCheck` 保留编译错误、运行异常和超时检查，增加“只有退出码 3”和“退出码 3 但拒绝标记只是错误消息的一部分”两项误判检查，均预期为 `EXECUTION_FAILED`。执行器仅在退出码与完整状态标记行一致、输入输出没有报告失败时确认成功或正常拒绝；输出读取失败返回简短错误说明。验证不涉及任意代码的可信性证明，也不自动分析异常堆栈。
+
 ## Harness 插件与独立服务
 
 独立插件、HTTP 接口、启动步骤、Docker 前提和限制见 [插件说明](../harness-plugin/abe-codegen/README.md)。插件生成固定 Java 示例，并通过统一入口验证，不提供任意源码执行。

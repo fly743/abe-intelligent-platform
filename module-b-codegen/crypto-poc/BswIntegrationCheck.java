@@ -1,6 +1,7 @@
 import co.junwei.bswabe.*;
 import com.abe.codegen.policy.*;
 import java.util.*;
+//验证策略转换与 BSW 库的衔接
 public class BswIntegrationCheck {
  public static void main(String[] args) throws Exception {
   var pub=new BswabePub(); var msk=new BswabeMsk(); Bswabe.setup(pub,msk);

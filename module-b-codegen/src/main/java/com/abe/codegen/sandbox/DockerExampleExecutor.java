@@ -87,8 +87,9 @@ public final class DockerExampleExecutor {
                     removed ? "无法启动 Docker" : "Docker 启动失败且清理未确认");
         }
         var output = new java.io.ByteArrayOutputStream();
+        AtomicBoolean readFailed = new AtomicBoolean();
         AtomicBoolean writeFailed = new AtomicBoolean();
-        Thread reader = new Thread(() -> { try (var in = p.getInputStream()) { byte[] b = new byte[1024]; int n; while ((n = in.read(b)) != -1) { int count = Math.min(n, MAX_OUTPUT - output.size()); if (count > 0) output.write(b, 0, count); } } catch (IOException ignored) { } });
+        Thread reader = new Thread(() -> { try (var in = p.getInputStream()) { byte[] b = new byte[1024]; int n; while ((n = in.read(b)) != -1) { int count = Math.min(n, MAX_OUTPUT - output.size()); if (count > 0) output.write(b, 0, count); } } catch (IOException e) { readFailed.set(true); } });
         Thread writer = new Thread(() -> { try (var out = p.getOutputStream()) { out.write(input); } catch (IOException e) { writeFailed.set(true); } });
         reader.setDaemon(true); writer.setDaemon(true); reader.start(); writer.start();
         boolean timedOut = false, interrupted = false, cleaned;
@@ -106,14 +107,19 @@ public final class DockerExampleExecutor {
         if (!cleaned) return new SandboxResult(SandboxResult.StageStatus.NOT_RUN, SandboxResult.StageStatus.NOT_RUN, SandboxResult.Outcome.CLEANUP_FAILED, SandboxResult.CleanupStatus.FAILED, timedOut ? "容器执行超时且清理未确认，请检查 Docker" : "容器清理未确认，请检查 Docker");
         if (reader.isAlive() || writer.isAlive()) return new SandboxResult(SandboxResult.StageStatus.NOT_RUN, SandboxResult.StageStatus.NOT_RUN, SandboxResult.Outcome.EXECUTION_FAILED, SandboxResult.CleanupStatus.SUCCESS, "容器输入输出未正常结束");
         String text = output.toString(StandardCharsets.UTF_8);
-        boolean compiled = text.contains("ABE_COMPILED\n");
+        boolean compiled = hasStatusLine(text, "ABE_COMPILED");
         if (timedOut) return new SandboxResult(compiled ? SandboxResult.StageStatus.SUCCESS : SandboxResult.StageStatus.TIMEOUT, compiled ? SandboxResult.StageStatus.TIMEOUT : SandboxResult.StageStatus.NOT_RUN, SandboxResult.Outcome.TIMEOUT, SandboxResult.CleanupStatus.SUCCESS, "容器执行超时");
+        if (readFailed.get()) return new SandboxResult(compiled ? SandboxResult.StageStatus.SUCCESS : SandboxResult.StageStatus.NOT_RUN, compiled ? SandboxResult.StageStatus.FAILED : SandboxResult.StageStatus.NOT_RUN, SandboxResult.Outcome.EXECUTION_FAILED, SandboxResult.CleanupStatus.SUCCESS, "容器输出读取失败，无法确认执行结果");
         if (!compiled && exit == 125) return new SandboxResult(SandboxResult.StageStatus.NOT_RUN, SandboxResult.StageStatus.NOT_RUN, SandboxResult.Outcome.ENVIRONMENT_UNAVAILABLE, SandboxResult.CleanupStatus.SUCCESS, "Docker 未能启动容器");
         if (!compiled && exit == 10) return new SandboxResult(SandboxResult.StageStatus.FAILED, SandboxResult.StageStatus.NOT_RUN, SandboxResult.Outcome.COMPILATION_FAILED, SandboxResult.CleanupStatus.SUCCESS, "生成的示例编译失败");
         if (!compiled) return new SandboxResult(SandboxResult.StageStatus.NOT_RUN, SandboxResult.StageStatus.NOT_RUN, SandboxResult.Outcome.EXECUTION_FAILED, SandboxResult.CleanupStatus.SUCCESS, "容器未正常进入编译阶段");
-        if (exit == 0 && !writeFailed.get() && text.contains("DECRYPTION_SUCCESS")) return new SandboxResult(SandboxResult.StageStatus.SUCCESS, SandboxResult.StageStatus.SUCCESS, SandboxResult.Outcome.SUCCESS, SandboxResult.CleanupStatus.SUCCESS, "授权解密成功");
-        if (exit == 3 && text.contains("POLICY_NOT_SATISFIED")) return new SandboxResult(SandboxResult.StageStatus.SUCCESS, SandboxResult.StageStatus.FAILED, SandboxResult.Outcome.POLICY_NOT_SATISFIED, SandboxResult.CleanupStatus.SUCCESS, "用户属性不满足访问策略，请检查属性和策略表达式");
+        if (writeFailed.get()) return new SandboxResult(SandboxResult.StageStatus.SUCCESS, SandboxResult.StageStatus.FAILED, SandboxResult.Outcome.EXECUTION_FAILED, SandboxResult.CleanupStatus.SUCCESS, "容器输入写入失败，无法确认执行结果");
+        if (exit == 0 && hasStatusLine(text, "DECRYPTION_SUCCESS")) return new SandboxResult(SandboxResult.StageStatus.SUCCESS, SandboxResult.StageStatus.SUCCESS, SandboxResult.Outcome.SUCCESS, SandboxResult.CleanupStatus.SUCCESS, "授权解密成功");
+        if (exit == 3 && hasStatusLine(text, "POLICY_NOT_SATISFIED")) return new SandboxResult(SandboxResult.StageStatus.SUCCESS, SandboxResult.StageStatus.FAILED, SandboxResult.Outcome.POLICY_NOT_SATISFIED, SandboxResult.CleanupStatus.SUCCESS, "用户属性不满足访问策略，请检查属性和策略表达式");
         return new SandboxResult(SandboxResult.StageStatus.SUCCESS, SandboxResult.StageStatus.FAILED, SandboxResult.Outcome.EXECUTION_FAILED, SandboxResult.CleanupStatus.SUCCESS, "示例运行失败，请检查运行环境和依赖；具体原因尚未确定");
+    }
+    private static boolean hasStatusLine(String output, String marker) {
+        return output.lines().anyMatch(marker::equals);
     }
     private static SandboxResult result(SandboxResult.Outcome outcome, String message) {
         return new SandboxResult(SandboxResult.StageStatus.NOT_RUN, SandboxResult.StageStatus.NOT_RUN, outcome, SandboxResult.CleanupStatus.NOT_NEEDED, message);

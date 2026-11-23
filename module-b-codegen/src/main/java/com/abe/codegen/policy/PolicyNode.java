@@ -1,6 +1,6 @@
 package com.abe.codegen.policy;
 
-/** 访问策略的不可变语法树。 */
+/** 访问策略的不可变语法树，定义了策略解析后的语法树。 */
 public sealed interface PolicyNode permits PolicyNode.Attribute, PolicyNode.And, PolicyNode.Or {
     record Attribute(String name) implements PolicyNode {
         public Attribute { AttributeRules.validateName(name); }
