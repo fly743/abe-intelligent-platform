@@ -1,0 +1,25 @@
+
+=== POSITIVE (qrels) ===
+cases=41  top1[min=0.633 p50=0.772 max=0.916]  floor[min=0.483 p50=0.664 max=0.814]
+
+=== NEGATIVE (unanswerable) ===
+cases=10  top1[min=0.529 p50=0.623 p90=0.738 max=0.744]  floor[min=0.492 p50=0.606]
+
+=== THRESHOLD SIMULATION ===
+   thr    posShort    posEmpty    negBlocked
+  0.15           0           0             0
+  0.20           0           0             0
+  0.25           0           0             0
+  0.30           0           0             0
+  0.35           0           0             0
+  0.40           0           0             0
+  0.45           0           0             0
+  0.50           1           0             0
+  0.55           4           0             3
+  0.60           9           0             3
+  0.65          18           2             5
+  0.70          25           8             8
+
+Legend: posShort = positive case loses snippets; posEmpty = positive case would be refused (bad); negBlocked = negative case correctly refused (good).
+
+NOT SEPARABLE: negative p90 (0.738) >= positive min (0.633). Keep a permissive threshold and rely on the model prompt for refusal.

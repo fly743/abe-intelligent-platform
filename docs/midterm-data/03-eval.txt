@@ -1,0 +1,70 @@
+health: collection=abe_knowledge points=106 status=UP
+qrels: 41 cases, topK=5
+
+[Q01] compare  recall= 50% hits=1/2 ret=5 s1=0.916  papers/bsw2007-cp-abe#3. CP-ABE 与 KP-ABE 的区别
+      -> 0.916  papers/bsw2007-cp-abe#3. CP-ABE 与 KP-ABE 的区别
+      -> 0.875  papers/gpsw2006-kp-abe#2. 与 CP-ABE 的区别
+      -> 0.813  notes/abe-scheme-comparison#KP-ABE：策略关联私钥
+[Q02] fact     recall= 50% hits=1/2 ret=5 s1=0.829  papers/bsw2007-cp-abe#3. CP-ABE 与 KP-ABE 的区别
+      -> 0.829  papers/bsw2007-cp-abe#3. CP-ABE 与 KP-ABE 的区别
+      -> 0.824  papers/gpsw2006-kp-abe#2. 与 CP-ABE 的区别
+      -> 0.798  papers/gpsw2006-kp-abe#1. KP-ABE 核心模型
+[Q03] fact     recall=100% hits=2/2 ret=5 s1=0.769  papers/bsw2007-cp-abe#4. 访问结构及单调性
+[Q04] fact     recall=100% hits=2/2 ret=5 s1=0.743  papers/bsw2007-cp-abe#5. 访问树和阈值门
+[Q05] fact     recall= 50% hits=1/2 ret=5 s1=0.833  papers/bsw2007-cp-abe#7. 五个算法接口
+      -> 0.833  papers/bsw2007-cp-abe#7. 五个算法接口
+      -> 0.793  notes/abe-engineering#与论文算法的对应关系
+      -> 0.788  papers/waters2011-cp-abe#9. 主方案系统参数
+[Q06] fact     recall=100% hits=1/1 ret=5 s1=0.766  papers/bsw2007-cp-abe#8. 双线性映射与符号
+[Q07] fact     recall=100% hits=1/1 ret=5 s1=0.794  papers/bsw2007-cp-abe#10. 加密：秘密沿访问树分发
+[Q08] fact     recall=100% hits=1/1 ret=5 s1=0.842  papers/bsw2007-cp-abe#11. 加密：密文组成
+[Q09] fact     recall=100% hits=1/1 ret=5 s1=0.728  papers/bsw2007-cp-abe#13. 解密：叶节点匹配与插值
+[Q10] fact     recall=100% hits=1/1 ret=5 s1=0.659  papers/bsw2007-cp-abe#12. KeyGen：私钥和属性绑定
+[Q11] fact     recall=100% hits=1/1 ret=5 s1=0.746  papers/bsw2007-cp-abe#16. 安全游戏及证明思路
+[Q12] boundary recall=100% hits=1/1 ret=5 s1=0.800  papers/bsw2007-cp-abe#17. 安全结论的边界
+[Q13] fact     recall=100% hits=1/1 ret=5 s1=0.816  papers/bsw2007-cp-abe#18. 撤销、数值属性及工程实现
+[Q14] fact     recall=100% hits=1/1 ret=5 s1=0.728  papers/chase2007-ma-abe#5. 可信中央机构的作用与风险
+[Q15] fact     recall=100% hits=2/2 ret=5 s1=0.753  papers/chase2007-ma-abe#4. 全局用户标识 GID
+[Q16] boundary recall=100% hits=1/1 ret=5 s1=0.793  papers/chase2007-ma-abe#10. 安全游戏和机构损坏边界
+[Q17] fact     recall=100% hits=1/1 ret=5 s1=0.809  papers/gpsw2006-kp-abe#12. 密钥委托的限制
+[Q18] fact     recall=100% hits=1/1 ret=5 s1=0.780  papers/gpsw2006-kp-abe#11. 大属性域与规模限制
+[Q19] fact     recall=100% hits=2/2 ret=5 s1=0.790  papers/waters2011-cp-abe#7. LSSS 线性重构
+[Q20] compare  recall= 50% hits=1/2 ret=5 s1=0.636  papers/waters2011-cp-abe#1. 论文目标及与 BSW 2007 ..
+      -> 0.636  papers/waters2011-cp-abe#1. 论文目标及与 BSW 2007 ..
+      -> 0.606  papers/waters2011-cp-abe#19. 论文对本项目的可用与不可推断内..
+      -> 0.595  papers/waters2011-cp-abe#文献与阅读边界
+[Q21] fact     recall=100% hits=1/1 ret=5 s1=0.736  papers/waters2011-cp-abe#4. 选择性安全与自适应安全
+[Q22] fact     recall=100% hits=1/1 ret=5 s1=0.795  papers/li2013-phr-abe#4. 个人域 PSD 和公共域 PUD
+[Q23] fact     recall=100% hits=2/2 ret=5 s1=0.793  papers/li2013-phr-abe#11. 撤销和前向保密的边界
+[Q24] fact     recall=100% hits=1/1 ret=5 s1=0.725  papers/li2013-phr-abe#12. 为什么读权限不能代替写权限
+[Q25] fact     recall=100% hits=1/1 ret=5 s1=0.684  papers/li2013-phr-abe#14. 紧急访问 break-glass
+[Q26] compare  recall=100% hits=2/2 ret=5 s1=0.834  papers/bsw2007-cp-abe#3. CP-ABE 与 KP-ABE 的区别
+[Q27] fact     recall=100% hits=1/1 ret=5 s1=0.781  papers/gpsw2006-kp-abe#1. KP-ABE 核心模型
+[Q28] fact     recall=100% hits=1/1 ret=5 s1=0.807  papers/gpsw2006-kp-abe#10. 抗合谋与安全模型
+[Q29] fact     recall=100% hits=1/1 ret=5 s1=0.784  papers/waters2011-cp-abe#12. 主方案解密的抵消关系
+[Q30] boundary recall=100% hits=2/2 ret=5 s1=0.686  papers/waters2011-cp-abe#13. 抗合谋的机制与边界
+[Q31] boundary recall=100% hits=1/1 ret=5 s1=0.896  papers/bsw2007-cp-abe#适用范围与局限
+[Q32] boundary recall=100% hits=1/1 ret=5 s1=0.706  papers/chase2007-ma-abe#5. 可信中央机构的作用与风险
+[Q33] boundary recall=100% hits=1/1 ret=5 s1=0.831  papers/gpsw2006-kp-abe#适用范围与局限
+[Q34] boundary recall=100% hits=1/1 ret=5 s1=0.737  papers/li2013-phr-abe#8. 公共域策略表达限制
+[Q35] boundary recall=100% hits=1/1 ret=5 s1=0.687  papers/waters2011-cp-abe#19. 论文对本项目的可用与不可推断内..
+[Q36] engineering recall=100% hits=2/2 ret=5 s1=0.752  notes/abe-engineering#配对参数与安全等级
+[Q37] engineering recall=100% hits=1/1 ret=5 s1=0.668  notes/abe-engineering#配对参数与安全等级
+[Q38] engineering recall=100% hits=1/1 ret=5 s1=0.772  papers/bsw2007-cp-abe#8. 双线性映射与符号
+[Q39] engineering recall=100% hits=1/1 ret=5 s1=0.804  notes/abe-engineering#序列化格式与跨实例隔离
+[Q40] engineering recall=100% hits=1/1 ret=5 s1=0.633  papers/bsw2007-cp-abe#7. 五个算法接口
+[Q41] engineering recall=100% hits=1/1 ret=5 s1=0.697  notes/abe-engineering#策略语法与属性规则
+
+================ RECALL SUMMARY ================
+cases           : 41
+targets         : 53
+Recall@5 (micro): 92.45%   (49/53)
+Mean recall@5  : 95.12%
+Hit@5          : 100.00%
+avg returned    : 5.00 / 5
+ret=0 cases     : 0
+ret<K cases     : 0   (score-threshold may be truncating)
+request errors  : 0
+PASS  target Recall@5 >= 0.90
+================================================
+report: D:\ABE-Program\module-a-rag\evaluation\reports\recall-at-5-20261123-163725.json
