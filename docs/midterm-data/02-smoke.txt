@@ -1,36 +1,34 @@
 loaded 17 cases, base=http://localhost:8080, topK=3
 
 
-No Kind Result Refused Invalid   Ms Cite                                                                               
--- ---- ------ ------- -------   -- ----                                                                               
- 1 概念   PASS     False       0 2388 papers/chase2007-ma-abe#1. 多授权机构解决什么问题 | papers/chase2007-ma-abe#适用范围与局限 | notes/ab
-                                    e-scheme-comparison#MA-ABE：多个机构与信任边界                                               
- 2 概念   PASS     False       0 2097 papers/gpsw2006-kp-abe#13. 线性秘密共享和论文边界 | papers/waters2011-cp-abe#7. LSSS 线性重构 | pa
-                                    pers/waters2011-cp-abe#6. LSSS 的矩阵与属性映射                                            
- 3 概念   PASS     False       0 1871 papers/gpsw2006-kp-abe#2. 与 CP-ABE 的区别 | papers/chase2007-ma-abe#2. MA-ABE 与 CP/KP 
-                                    的关系                                                                                
- 4 对比   PASS     False       0 2009 papers/bsw2007-cp-abe#3. CP-ABE 与 KP-ABE 的区别 | papers/gpsw2006-kp-abe#2. 与 CP-ABE 的
-                                    区别 | notes/abe-scheme-comparison#KP-ABE：策略关联私钥                                     
- 5 对比   PASS     False       0 2103 notes/abe-scheme-comparison#比较维度和来源 | notes/abe-scheme-comparison#比较结论的范围 | papers/
-                                    li2013-phr-abe#17. 性能分析的范围                                                         
- 6 对比   PASS     False       0 2949 papers/bsw2007-cp-abe#15. 抗合谋：什么不能合并 | papers/waters2011-cp-abe#13. 抗合谋的机制与边界 | pap
-                                    ers/li2013-phr-abe#16. 安全证明与合谋边界                                                   
- 7 FAQ  PASS     False       0 2363 papers/bsw2007-cp-abe#11. 加密：密文组成 | papers/waters2011-cp-abe#10. 主方案加密和密文          
- 8 FAQ  PASS     False       0 1162 papers/li2013-phr-abe#8. 公共域策略表达限制                                                 
- 9 FAQ  PASS     False       0 2184 papers/li2013-phr-abe#10. 按需属性与用户撤销 | papers/li2013-phr-abe#11. 撤销和前向保密的边界         
-10 拒答   PASS      True       0 1882 notes/abe-engineering#配对参数与安全等级 | papers/waters2011-cp-abe#2. 三种构造的定位 | notes/abe-e
-                                    ngineering#上游已知缺陷与外围修补                                                             
-11 概念   PASS     False       0 1312 papers/gpsw2006-kp-abe#2. 与 CP-ABE 的区别 | papers/bsw2007-cp-abe#3. CP-ABE 与 KP-ABE 的
-                                    区别 | papers/gpsw2006-kp-abe#1. KP-ABE 核心模型                                         
-12 概念   PASS     False       0 1812 papers/gpsw2006-kp-abe#12. 密钥委托的限制 | papers/gpsw2006-kp-abe#适用范围与局限                
-13 FAQ  PASS     False       0 1323 papers/chase2007-ma-abe#5. 可信中央机构的作用与风险                                            
-14 边界   PASS     False       0 1705 papers/bsw2007-cp-abe#17. 安全结论的边界 | papers/bsw2007-cp-abe#适用范围与局限 | papers/waters20
-                                    11-cp-abe#1. 论文目标及与 BSW 2007 的关系                                                   
-15 边界   PASS     False       0 1659 papers/chase2007-ma-abe#12. 可扩展性与论文局限 | papers/chase2007-ma-abe#5. 可信中央机构的作用与风险 | p
-                                    apers/chase2007-ma-abe#文献及范围                                                       
-16 工程   PASS     False       0 2395 notes/abe-engineering#配对参数与安全等级 | notes/abe-engineering#与论文算法的对应关系                 
-17 工程   PASS     False       0 1479 papers/bsw2007-cp-abe#7. 五个算法接口 | notes/abe-engineering#与论文算法的对应关系 | notes/abe-engi
-                                    neering#上游已知缺陷与外围修补                                                                
+No Kind Result Refused Invalid    Ms Cite                                                                              
+-- ---- ------ ------- -------    -- ----                                                                              
+ 1 概念   PASS     False       0 25897 papers/chase2007-ma-abe#1. 多授权机构解决什么问题 | papers/chase2007-ma-abe#适用范围与局限 | notes/a
+                                     be-scheme-comparison#MA-ABE：多个机构与信任边界                                             
+ 2 概念   PASS     False       0  2179 papers/waters2011-cp-abe#7. LSSS 线性重构 | papers/waters2011-cp-abe#6. LSSS 的矩阵与属性映射 
+ 3 概念   PASS     False       0  2220 papers/bsw2007-cp-abe#3. CP-ABE 与 KP-ABE 的区别 | papers/gpsw2006-kp-abe#2. 与 CP-ABE 
+                                     的区别 | papers/chase2007-ma-abe#2. MA-ABE 与 CP/KP 的关系                               
+ 4 对比   PASS     False       0  3212 papers/bsw2007-cp-abe#3. CP-ABE 与 KP-ABE 的区别 | papers/gpsw2006-kp-abe#2. 与 CP-ABE 
+                                     的区别 | notes/abe-scheme-comparison#KP-ABE：策略关联私钥                                   
+ 5 对比   PASS     False       0  2554 notes/abe-scheme-comparison#比较维度和来源 | notes/abe-scheme-comparison#比较结论的范围 | papers
+                                     /li2013-phr-abe#17. 性能分析的范围                                                       
+ 6 对比   PASS     False       0  3023 papers/bsw2007-cp-abe#15. 抗合谋：什么不能合并 | papers/waters2011-cp-abe#13. 抗合谋的机制与边界 | pa
+                                     pers/li2013-phr-abe#16. 安全证明与合谋边界                                                 
+ 7 FAQ  PASS     False       0  2473 papers/bsw2007-cp-abe#11. 加密：密文组成 | papers/waters2011-cp-abe#10. 主方案加密和密文 | papers
+                                     /bsw2007-cp-abe#3. CP-ABE 与 KP-ABE 的区别                                            
+ 8 FAQ  PASS     False       0  1257 papers/li2013-phr-abe#8. 公共域策略表达限制                                                
+ 9 FAQ  PASS     False       0  2002 papers/li2013-phr-abe#10. 按需属性与用户撤销 | papers/li2013-phr-abe#11. 撤销和前向保密的边界        
+10 拒答   PASS      True       0  1875 notes/abe-engineering#配对参数与安全等级 | papers/waters2011-cp-abe#2. 三种构造的定位             
+11 概念   PASS     False       0  1348 papers/gpsw2006-kp-abe#2. 与 CP-ABE 的区别 | papers/bsw2007-cp-abe#3. CP-ABE 与 KP-ABE 
+                                     的区别 | papers/gpsw2006-kp-abe#1. KP-ABE 核心模型                                       
+12 概念   PASS     False       0  1458 papers/gpsw2006-kp-abe#12. 密钥委托的限制 | papers/gpsw2006-kp-abe#适用范围与局限               
+13 FAQ  PASS     False       0  1144 papers/chase2007-ma-abe#5. 可信中央机构的作用与风险                                           
+14 边界   PASS     False       0  2476 papers/bsw2007-cp-abe#17. 安全结论的边界 | papers/bsw2007-cp-abe#适用范围与局限                 
+15 边界   PASS     False       0  1277 papers/chase2007-ma-abe#12. 可扩展性与论文局限 | papers/chase2007-ma-abe#5. 可信中央机构的作用与风险 | 
+                                     papers/chase2007-ma-abe#文献及范围                                                     
+16 工程   PASS     False       0  2648 notes/abe-engineering#配对参数与安全等级                                                   
+17 工程   PASS     False       0  1334 papers/bsw2007-cp-abe#7. 五个算法接口 | notes/abe-engineering#与论文算法的对应关系 | notes/abe-eng
+                                     ineering#上游已知缺陷与外围修补                                                              
 
 
 
@@ -42,30 +40,29 @@ No Question                       Result Cite
 -- --------                       ------ ----                                                                          
  1 多授权机构要解决 ABE 的什么问题             PASS   papers/chase2007-ma-abe#1. 多授权机构解决什么问题 | papers/chase2007-ma-abe#适用范围与局限 | not
                                          es/abe-scheme-comparison#MA-ABE：多个机构与信任边界                                     
- 2 LSSS 线性秘密共享是怎么做线性重构的           PASS   papers/gpsw2006-kp-abe#13. 线性秘密共享和论文边界 | papers/waters2011-cp-abe#7. LSSS 线性重构
-                                          | papers/waters2011-cp-abe#6. LSSS 的矩阵与属性映射                                  
- 3 MA-ABE 和 CP-ABE、KP-ABE 之间是什么关系 PASS   papers/gpsw2006-kp-abe#2. 与 CP-ABE 的区别 | papers/chase2007-ma-abe#2. MA-ABE 与 C
-                                         P/KP 的关系                                                                      
+ 2 LSSS 线性秘密共享是怎么做线性重构的           PASS   papers/waters2011-cp-abe#7. LSSS 线性重构 | papers/waters2011-cp-abe#6. LSSS 的矩阵与属
+                                         性映射                                                                           
+ 3 MA-ABE 和 CP-ABE、KP-ABE 之间是什么关系 PASS   papers/bsw2007-cp-abe#3. CP-ABE 与 KP-ABE 的区别 | papers/gpsw2006-kp-abe#2. 与 CP-
+                                         ABE 的区别 | papers/chase2007-ma-abe#2. MA-ABE 与 CP/KP 的关系                       
  4 CP-ABE 和 KP-ABE 有什么区别          PASS   papers/bsw2007-cp-abe#3. CP-ABE 与 KP-ABE 的区别 | papers/gpsw2006-kp-abe#2. 与 CP-
                                          ABE 的区别 | notes/abe-scheme-comparison#KP-ABE：策略关联私钥                           
  5 方案比较时参考了哪些维度和来源                PASS   notes/abe-scheme-comparison#比较维度和来源 | notes/abe-scheme-comparison#比较结论的范围 | pa
                                          pers/li2013-phr-abe#17. 性能分析的范围                                               
  6 抗合谋时哪些用户的密钥不能合并                PASS   papers/bsw2007-cp-abe#15. 抗合谋：什么不能合并 | papers/waters2011-cp-abe#13. 抗合谋的机制与边界 
                                          | papers/li2013-phr-abe#16. 安全证明与合谋边界                                         
- 7 CP-ABE 的密文由哪些部分组成              PASS   papers/bsw2007-cp-abe#11. 加密：密文组成 | papers/waters2011-cp-abe#10. 主方案加密和密文     
+ 7 CP-ABE 的密文由哪些部分组成              PASS   papers/bsw2007-cp-abe#11. 加密：密文组成 | papers/waters2011-cp-abe#10. 主方案加密和密文 | pa
+                                         pers/bsw2007-cp-abe#3. CP-ABE 与 KP-ABE 的区别                                    
  8 公共域上的策略表达有什么限制                 PASS   papers/li2013-phr-abe#8. 公共域策略表达限制                                            
  9 按需属性如何支持用户撤销                   PASS   papers/li2013-phr-abe#10. 按需属性与用户撤销 | papers/li2013-phr-abe#11. 撤销和前向保密的边界    
-10 ABE 如何做后量子安全改造，格基方案有哪些         PASS   notes/abe-engineering#配对参数与安全等级 | papers/waters2011-cp-abe#2. 三种构造的定位 | notes/
-                                         abe-engineering#上游已知缺陷与外围修补                                                   
+10 ABE 如何做后量子安全改造，格基方案有哪些         PASS   notes/abe-engineering#配对参数与安全等级 | papers/waters2011-cp-abe#2. 三种构造的定位         
 11 KP-ABE 里访问策略是放在密文还是用户私钥上       PASS   papers/gpsw2006-kp-abe#2. 与 CP-ABE 的区别 | papers/bsw2007-cp-abe#3. CP-ABE 与 KP-
                                          ABE 的区别 | papers/gpsw2006-kp-abe#1. KP-ABE 核心模型                               
 12 KP-ABE 的密钥委托能不能扩大权限            PASS   papers/gpsw2006-kp-abe#12. 密钥委托的限制 | papers/gpsw2006-kp-abe#适用范围与局限           
 13 多授权机构的中央机构能不能解密消息              PASS   papers/chase2007-ma-abe#5. 可信中央机构的作用与风险                                       
-14 BSW 2007 的 CP-ABE 不能推出哪些安全结论   PASS   papers/bsw2007-cp-abe#17. 安全结论的边界 | papers/bsw2007-cp-abe#适用范围与局限 | papers/wat
-                                         ers2011-cp-abe#1. 论文目标及与 BSW 2007 的关系                                         
+14 BSW 2007 的 CP-ABE 不能推出哪些安全结论   PASS   papers/bsw2007-cp-abe#17. 安全结论的边界 | papers/bsw2007-cp-abe#适用范围与局限             
 15 Chase 2007 是完全去中心化的方案吗         PASS   papers/chase2007-ma-abe#12. 可扩展性与论文局限 | papers/chase2007-ma-abe#5. 可信中央机构的作用与风
                                          险 | papers/chase2007-ma-abe#文献及范围                                             
-16 本项目 ABE 用的是什么库和配对参数            PASS   notes/abe-engineering#配对参数与安全等级 | notes/abe-engineering#与论文算法的对应关系            
+16 本项目 ABE 用的是什么库和配对参数            PASS   notes/abe-engineering#配对参数与安全等级                                               
 17 为什么这套 BSW 实现不能直接做密钥委托          PASS   papers/bsw2007-cp-abe#7. 五个算法接口 | notes/abe-engineering#与论文算法的对应关系 | notes/abe
                                          -engineering#上游已知缺陷与外围修补                                                      
 

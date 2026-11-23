@@ -11,6 +11,11 @@
         03-eval.txt      scripts\eval-recall.ps1 (41 qrels cases / 53 targets)
         04-probe.txt     scripts\probe-scores.ps1 (threshold calibration)
 
+    Child scripts are launched as separate processes with stdout/stderr
+    redirected to files. This is required because they use Write-Host, which
+    does not travel through a PowerShell pipeline in 5.1 and would otherwise
+    drop the summary line (e.g. "PASS 17 / 17").
+
     Steps can be run one at a time so a single call never exceeds a shell
     timeout: -Step health|smoke|eval|probe. Use -Step all to run everything.
 
@@ -28,7 +33,7 @@
     health | smoke | eval | probe | all
 
 .EXAMPLE
-    powershell -ExecutionPolicy Bypass -File .\scripts\collect-midterm.ps1 -Step health
+    powershell -ExecutionPolicy Bypass -File .\scripts\collect-midterm.ps1 -Step smoke
 #>
 param(
     [string]$Base = 'http://localhost:8080',
@@ -44,6 +49,7 @@ $repo = Split-Path -Parent $PSScriptRoot
 if (-not $OutDir) { $OutDir = Join-Path $repo 'docs\midterm-data' }
 New-Item -ItemType Directory -Force -Path $OutDir | Out-Null
 $utf8 = New-Object System.Text.UTF8Encoding($false)
+
 function Save-Text([string]$name, [string]$text) {
     [System.IO.File]::WriteAllText((Join-Path $OutDir $name), $text, $utf8)
 }
@@ -51,6 +57,28 @@ function Save-Text([string]$name, [string]$text) {
 function Assert-Service {
     $ok = Test-NetConnection 127.0.0.1 -Port 8080 -InformationLevel Quiet
     if (-not $ok) { throw 'RAG service is not listening on 8080; start module-d-integration first' }
+}
+
+# Run a child PowerShell script and capture everything, including Write-Host.
+function Invoke-ChildScript([string]$scriptPath) {
+    $tmpOut = Join-Path $env:TEMP ('collect-' + [guid]::NewGuid().ToString('N') + '.out')
+    $tmpErr = $tmpOut + '.err'
+    try {
+        Start-Process -FilePath 'powershell.exe' `
+            -ArgumentList @('-ExecutionPolicy', 'Bypass', '-File', $scriptPath) `
+            -NoNewWindow -Wait -PassThru `
+            -RedirectStandardOutput $tmpOut -RedirectStandardError $tmpErr | Out-Null
+        $text = ''
+        if (Test-Path -LiteralPath $tmpOut) { $text = [System.IO.File]::ReadAllText($tmpOut, [System.Text.Encoding]::UTF8) }
+        if (Test-Path -LiteralPath $tmpErr) {
+            $err = [System.IO.File]::ReadAllText($tmpErr, [System.Text.Encoding]::UTF8)
+            if ($err.Trim().Length -gt 0) { $text += "`n[stderr]`n" + $err }
+        }
+        return $text
+    }
+    finally {
+        Remove-Item -LiteralPath $tmpOut, $tmpErr -Force -ErrorAction SilentlyContinue
+    }
 }
 
 function Run-Step([string]$name) {
@@ -64,7 +92,7 @@ function Run-Step([string]$name) {
         'smoke' {
             Assert-Service
             $p = Join-Path $repo 'scripts\rag-smoke.ps1'
-            $txt = & powershell -ExecutionPolicy Bypass -File $p 2>&1 | Out-String
+            $txt = Invoke-ChildScript $p
             Save-Text '02-smoke.txt' $txt
             $m = [regex]::Match($txt, 'PASS\s+(\d+)\s*/\s*(\d+)')
             Write-Output ("[smoke] PASS {0}/{1} -> 02-smoke.txt" -f $m.Groups[1].Value, $m.Groups[2].Value)
@@ -72,7 +100,7 @@ function Run-Step([string]$name) {
         'eval' {
             Assert-Service
             $p = Join-Path $repo 'scripts\eval-recall.ps1'
-            $txt = & powershell -ExecutionPolicy Bypass -File $p 2>&1 | Out-String
+            $txt = Invoke-ChildScript $p
             Save-Text '03-eval.txt' $txt
             $m = [regex]::Match($txt, 'Recall@5 \(micro\):\s*([\d.]+)%\s*\((\d+)/(\d+)\)')
             Write-Output ("[eval] Recall@5 {0}% ({1}/{2}) -> 03-eval.txt" -f $m.Groups[1].Value, $m.Groups[2].Value, $m.Groups[3].Value)
@@ -86,7 +114,7 @@ function Run-Step([string]$name) {
         'probe' {
             Assert-Service
             $p = Join-Path $repo 'scripts\probe-scores.ps1'
-            $txt = & powershell -ExecutionPolicy Bypass -File $p 2>&1 | Out-String
+            $txt = Invoke-ChildScript $p
             Save-Text '04-probe.txt' $txt
             $verdict = if ($txt -match 'NOT SEPARABLE') { 'NOT SEPARABLE' } elseif ($txt -match 'SEPARABLE') { 'SEPARABLE' } else { 'UNKNOWN' }
             Write-Output ("[probe] {0} -> 04-probe.txt" -f $verdict)
